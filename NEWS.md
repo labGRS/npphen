@@ -1,3 +1,8 @@
+npphen 1.5.1
+===========
+
+* Fix NA problems in **ExtremeAnom** and **ExtremeAnoMap**
+
 npphen 1.5.0
 ===========
 
