@@ -28,6 +28,15 @@ library(npphen)
 
 ```
 
+For developers version:
+
+
+```r
+remotes::install_github('labGRS/npphen')
+library(npphen)
+
+```
+
 For a brief introduction and examples, check out the [tutorial](https://www.pucv.cl/uuaa/labgrs/proyectos/introduction-to-npphen-in-r).
 
 ## License
