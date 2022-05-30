@@ -64,7 +64,7 @@
 ExtremeAnoMap <-
   function(s,dates,h,refp,anop,rge, output='both',rfd = 0.9,nCluster,outname,format,datatype) {
     ff <- function(x) {
-
+      
       if(length(rge)!=2){stop("rge must be a vector of length 2")}
       if(rge[1]>rge[2]){stop("rge vector order must be minimum/maximum")}
       if(length(dates)!=length(x)){stop("N of dates and files do not match")}
@@ -83,23 +83,33 @@ ExtremeAnoMap <-
       
       if(ref.min>=ref.max | ano.min>ano.max){stop("for refp or anop, lower value > upper value")}
       
-      if (all(is.na(x))) {
+      if (all(is.na(x)) & output != 'clean') {
         return(rep(NA,len2))
+      }
+      if (all(is.na(x)) & output == 'clean') {
+        return(rep(NA,ano.len))
       }
       
       DOY <- yday(dates)
-      DOY[which(DOY==366)]<-365	
+      DOY[which(DOY==366)]<-365
       D1<-cbind(DOY[ref.min:ref.max],x[ref.min:ref.max])
       D2<-cbind(DOY[ano.min:ano.max],x[ano.min:ano.max])
       
-      if(length(unique(D1[,2]))<10 | (nrow(D1)-sum(is.na(D1)))<(0.1*nrow(D1))) { 
+      if(length(unique(D1[,2]))<10 | (nrow(D1)-sum(is.na(D1)))<(0.1*nrow(D1)) & output != 'clean') {
         return(rep(NA,len2))
       }
       
-      if (all(is.na(D2[,2]))) {
+      if(length(unique(D1[,2]))<10 | (nrow(D1)-sum(is.na(D1)))<(0.1*nrow(D1)) & output == 'clean') {
+        return(rep(NA,ano.len))
+      }
+      
+      if (all(is.na(D2[,2])) & output != 'clean') {
         return(rep(NA,len2))
       }
-
+      if (all(is.na(D2[,2])) & output == 'clean') {
+        return(rep(NA,ano.len))
+      }
+      
       if(h!=1 && h!=2){stop("Invalid h")}
       DOGS<-cbind(seq(1,365),c(seq(185,365),seq(1,184)))
       if(h==2){
@@ -114,7 +124,7 @@ ExtremeAnoMap <-
         Kdiv<-sum(K1$estimate[j,])
         ifelse(Kdiv==0,K1Con[j,]<-0,K1Con[j,]<-K1$estimate[j,]/sum(K1$estimate[j,]))}
       MAXY<-apply(K1Con,1,max)
-      for(i in 1:365){ 
+      for(i in 1:365){
         n.select <- which(K1Con[i,]==MAXY[i],arr.ind=TRUE)
         if(length(n.select) > 1){
           n <- n.select[1]
@@ -124,7 +134,7 @@ ExtremeAnoMap <-
           MAXY[i]<-median(K1$eval.points[[2]][n])
         }
       }
-
+      
       h2d <- list()
       h2d$x <- seq(1,365)
       h2d$y <- seq(rge[1],rge[2],len=500)
@@ -134,17 +144,17 @@ ExtremeAnoMap <-
       names(cumRFDs) <- uniqueVals
       h2d$cumDensity <- matrix(nrow = nrow(h2d$density), ncol = ncol(h2d$density))
       h2d$cumDensity[] <- cumRFDs[as.character(h2d$density)]
-
+      
       if(h==2){
         for(i in 1:nrow(D2)){
           D2[i,1]<-DOGS[which(DOGS[,1]==D2[i,1],arr.ind=TRUE),2]}} 
-
+      
       Anoma <- rep(NA,ano.len)
       for(i in 1:nrow(D2)){
         Anoma[i]<-as.integer(D2[i,2]-MAXY[D2[i,1]])}
       Anoma <- Anoma[1:ano.len]
       names(Anoma) <- paste('anom',dates[ano.min:ano.max],sep = '_')
-
+      
       rowAnom<-matrix(NA,nrow=nrow(D2),ncol=500)
       for(i in 1:nrow(D2)){
         rowAnom[i,]<-abs(h2d$y-D2[i,2])}
@@ -154,7 +164,7 @@ ExtremeAnoMap <-
         AnomRFD[i]<-h2d$cumDensity[D2[i,1],rowAnom2[i]]}
       AnomRFDPerc <- round(100*(AnomRFD))
       names(AnomRFDPerc)<- paste('rfd',dates[ano.min:ano.max],sep = '_')
-
+      
       rfd <- rfd*100
       if(output == 'both'){
         out_data <- c(Anoma,AnomRFDPerc)}
@@ -165,17 +175,16 @@ ExtremeAnoMap <-
       if(output == 'clean'){
         if (rfd == 0 ){ 
           stop("For output = clean, rfd should be a value between 0 - 0.99")}
-
-      p <- which(AnomRFDPerc >= rfd | is.na(AnomRFDPerc))
-
-      aa <- rep(NA, ano.len)
-      for (i in p) {
-          aa[i] <- Anoma[i]
-      }
-      names(aa) <- dates[ano.min:ano.max]
         
-      out_data <- aa}
-  
+        p <- which(AnomRFDPerc >= rfd | is.na(AnomRFDPerc))
+        aa <- rep(NA, ano.len)
+        for (i in p) {
+          aa[i] <- Anoma[i]
+        }
+        names(aa)<- dates[ano.min:ano.max]
+        
+        out_data <- aa}
+      
       out_data
       
     }
