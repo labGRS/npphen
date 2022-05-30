@@ -1,0 +1,7 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.txt$
+^NEWS.md$
+^\.github$
+^README\.md$
+^man/figures$
