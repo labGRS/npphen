@@ -2,7 +2,7 @@ Package: npphen
 Type: Package
 Title: Vegetation Phenological Cycle and Anomaly Detection using Remote
         Sensing Data
-Version: 1.5.0
+Version: 1.5.2
 Date: 2022-05-05
 Author: Roberto O. Chávez [cre, aut], Sergio A. Estay [cre, aut], José A. Lastra [cre,ctb] & Carlos G. Riquelme [ctb]
 Maintainer: José A. Lastra <jose.lastra@pucv.cl>
