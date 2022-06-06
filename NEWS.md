@@ -1,3 +1,8 @@
+npphen 1.5.2 
+===========
+
+* Fix minor bugs
+
 npphen 1.5.1
 ===========
 
