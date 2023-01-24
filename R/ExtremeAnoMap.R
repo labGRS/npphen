@@ -1,7 +1,7 @@
 #' @title ExtremeAnoMap
 #' @description Based on the annual reference frequency distribution of a vegetation index time series (e.g. a raster stack of NDVI), calculates anomalies and how extreme these anomalies are (rfd position ranging from 0 to 100).
 #' @encoding UTF-8
-#' @param s Raster stack. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior.The code has been optimized to work with integer values. Please re-scale the input raster stack if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000).
+#' @param s SpatRaster. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior.The code has been optimized to work with integer values. Please re-scale the input raster stack if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000).
 #' @param dates A date vector. The number of dates must be equal to the number of layers of raster stack.
 #' @param h Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h=1 if the vegetation is in the Northern Hemisphere (season starting at January 1st), h=2 if it is in the Southern Hemisphere (season starting at July 1st).
 #' @param refp Numeric vector with the correlative number of dates to be used as reference period. For example, refp = c(1:393) for MODIS Vegetation Index 16-days composites (18/02/2000 – 06/06/2017)
@@ -11,10 +11,9 @@
 #' @param rfd Numeric. This argument only applies when the argument output='clean'. It defines the percentile (from 0 to 0.99) of the reference frequency distribution, for which anomalies are not flagged as extreme anomalies. For example, if 'rfd = 0.90' only anomalies falling outside the '0.90 rfd' (default value) will be flagged as extreme anomalies while the rest will be neglected (NA values). Please notice that'rfd = 0.90' implies that the 5\% of the most extreme positive and 5\% of the most extreme negative anomalies will be considered.
 #' @param nCluster	Numeric. Number of CPU cores to be used for computational calculations
 #' @param outname	Character vector with the output path and filename with extension or only the filename and extension if work directory was set. For example outname ="output_anom.tif". See \code{\link{writeRaster}}
-#' @param format	Character. Output file type. See \code{\link{writeFormats}}
 #' @param datatype	Character. Output data type. See \code{\link{dataType}}
 #' @details Similar to \code{\link{ExtremeAnom}}, it calculates phenological anomalies but using a raster stack instead of a numeric vector of vegetation canopy greenness values (e.g. Leaf Area Index, LAI) or satellite based greenness proxies such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). For this purpose, it divides the time series (raster stack) of vegetation greenness into 2: the reference period, from which the annual phenological cycle is calculated (same as \code{\link{PhenMap}} function), and the observation period, for which we want to calculate anomalies with respect to the annual phenological cycle. Negative anomalies correspond to observed values lower than the reference and positive anomalies to values higher than the reference. his anomalies can be filtered by the position of the observation within the historical rfd. Users can, for example, set 'rfd = 0.95' to consider only anomalies that outside the 95\% rfd of historical records.
-#' @return RasterStack
+#' @return SpatRaster
 #' @seealso \code{\link{ExtremeAnom}}
 #' @examples
 #' \dontrun{
