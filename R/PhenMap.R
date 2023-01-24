@@ -20,7 +20,7 @@
 #'
 #' # Load data
 #' #SpatRaster
-#' data("MegaDrought_spatRast")
+#' MegaDrought <- readRDS('data/MegaDrought_spatRast.rda')
 #' #Dates
 #' data("modis_dates")
 #'
@@ -29,7 +29,7 @@
 #' # Define the number of cores to be use. In this example we use 1
 #' nc1<-1
 #'
-#'PhenMap(s = MegaDrought_spatRast,dates = modis_dates,h = 2,
+#'PhenMap(s = MegaDrought,dates = modis_dates,h = 2,
 #'frequency = '16-days',nCluster = nc1,outname = 'phen_MD.tif', 
 #'datatype = 'INT2S',rge = c(0,10000))
 #' #map1 <- rast("phen_MD.tif")#run only for load phenology brick
@@ -39,7 +39,7 @@
 #'
 #' # Load data
 #' SpatRaster
-#' data("Bdesert_stack")
+#' Bdesert <- readRDS('data/Bdesert_spatRast.rda')
 #' #Dates
 #' data("modis_dates")
 #'
@@ -47,7 +47,7 @@
 #' # Define the number of cores to be use. In this example we use 1
 #' nc1<-1
 #'
-#'PhenMap(s= Bdesert_spatRast,dates=modis_dates,h=2,
+#'PhenMap(s= Bdesert,dates=modis_dates,h=2,
 #'frequency='16-days', nCluster=1,outname="phen_BD.tif", 
 #'datatype="INT2S",rge=c(0,10000))
 #' #map2 <- rast("phen_BD.tif") #run only for load phenology brick

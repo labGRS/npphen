@@ -23,37 +23,34 @@
 #' #showing extreme negative anomalies (browning)##
 #'
 #' # Load data
-#' #RasterStack
-#' data("MegaDrought_stack")
+#' #SpatRaster
+#' MegaDrought <- readRDS('data/MegaDrought_spatRast.rda')
 #' #Dates
 #' data("modis_dates")
 #'
-#' library(snow)
-#'
 #' # Define the number of cores to be use. In this example we use 1
 #' nc1 <- 1
-#' ExtremeAnoMap(s=MegaDrought_stack,dates=modis_dates,h=2,refp = c(1:423), 
+#' ExtremeAnoMap(s=MegaDrought,dates=modis_dates,h=2,refp = c(1:423), 
 #' anop = c(884:929),rfd = 0.9,output = 'both',nCluster=nc1,outname="anomRFD_MD.tif",
-#' format="GTiff", datatype="INT2S", rge=c(0,10000))
+#' datatype="INT2S", rge=c(0,10000))
 #' #map_an1 <- stack("anomRFD_MD.tif")#run only for load anomaly brick
 #' #plot(map_an1)
-#'
 #'
 #' ## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI), 
 #' #showing extreme positive anomalies (greening)##
 #'
 #' # Load data
 #' RasterStack
-#' data("Bdesert_stack")
+#' Bdesert <- readRDS('data/Bdesert_spatRast.rda')
 #' #Dates
 #' data("modis_dates")
 #'
 #' # Define the number of cores to be use. In this example we use 1
 #' nc1 <- 1
 #'
-#' ExtremeAnoMap(s=Bdesert_stack,dates=modis_dates,h=2,refp = c(1:423), 
+#' ExtremeAnoMap(s=Bdesert,dates=modis_dates,h=2,refp = c(1:423), 
 #' anop = c(723:768),rfd = 0.9,output = 'both',nCluster=nc1,outname="anomRFD_BD.tif",
-#' format="GTiff", datatype="INT2S", rge=c(0,10000))
+#' datatype="INT2S", rge=c(0,10000))
 #' #map_an1 <- stack("anomRFD_BD.tif")#run only for load anomaly brick
 #' #plot(map_an1)
 #' 
@@ -61,7 +58,7 @@
 #' @export
 
 ExtremeAnoMap <-
-  function(s,dates,h,refp,anop,rge, output='both',rfd = 0.9,nCluster,outname,format,datatype) {
+  function(s,dates,h,refp,anop,rge, output='both',rfd = 0.9,nCluster,outname,datatype) {
     ff <- function(x) {
       
       if(length(rge)!=2){stop("rge must be a vector of length 2")}
@@ -187,10 +184,5 @@ ExtremeAnoMap <-
       out_data
       
     }
-
-    beginCluster(n=nCluster) 
-    dates <<- dates
-    clusterR(x=s,calc, args=list(ff),export=c('dates'),filename=outname,format=format,
-             datatype=datatype,overwrite=T)
-    endCluster()
+    app(s, fun = ff, filename = outname, cores = nCluster, overwrite = T, wopt = list(datatype = datatype))
   }
