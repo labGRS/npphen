@@ -2,7 +2,7 @@ Package: npphen
 Type: Package
 Title: Vegetation Phenological Cycle and Anomaly Detection using Remote
         Sensing Data
-Version: 1.5.2
+Version: 2.0.0
 Date: 2022-05-05
 Author: Roberto O. Chávez [cre, aut], Sergio A. Estay [cre, aut], José A. Lastra [cre,ctb] & Carlos G. Riquelme [ctb]
 Maintainer: José A. Lastra <jose.lastra@pucv.cl>
@@ -12,10 +12,10 @@ Description: Calculates phenological cycle and anomalies using a non-parametric
     manipulating vector data (numerical series) and raster data (satellite derived products).
     Processing of very large raster files is supported. For more information, please check 
     the following paper:
-    Estay, S., Chávez, R.O. (2018) <doi:10.1101/301143>.
+    Chávez et al. (2023) <https://doi.org/10.3390/rs15010073>.
 License: GPL (>= 3)
-Depends: R (>= 3.6.0), raster, ks
-Imports: methods, graphics, stats, rgdal, lubridate, snow
+Depends: R (>= 3.6.0), terra, ks
+Imports: methods, graphics, stats, sf, lubridate, snow
 Suggests: rgeos (>= 0.3-8),tcltk
 Encoding: UTF-8
 Roxygen: list(old_usage = TRUE)
