@@ -7,3 +7,4 @@
 ^man/figures$
 ^_pkgdown\.yml$
 ^pkgdown$
+^docs$
