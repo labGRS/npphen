@@ -38,19 +38,18 @@ ylab = "NDVI",rge=c(0,10000))
 }
 \donttest{
 library(lubridate)
-
+library(terra)
 ## Testing raster data from Central Chile (NDVI), h=2##
-
 # Load data
-#RasterStack
-data("MegaDrought_stack")
+f <- system.file('extdata/MegaDrought_spatRast.rda', package = 'npphen')
+MegaDrought <- readRDS(f)
 #Dates
 data("modis_dates")
 
 # Generate a Raster time series using a raster stack and a date database from Central Chile
 # Obtain data from a particular pixel generating a time series
-md_pixel <- cellFromXY(MegaDrought_stack,c(313395,6356610))
-md_pixelts <- as.numeric(MegaDrought_stack[md_pixel])
+md_pixel <- cellFromXY(MegaDrought,cbind(313395,6356610))
+md_pixelts <- as.numeric(MegaDrought[md_pixel])
 plot(modis_dates,md_pixelts, type='l')
 
 # Phenology for the given pixel
@@ -60,15 +59,14 @@ PhenKplot(x=md_pixelts,dates=modis_dates,h=2,xlab="DGS", ylab="NDVI", rge=c(0,10
 ## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI), h=2 ##
 
 # Load data
-#RasterStack
-data("Bdesert_stack")
-#Dates
-data("modis_dates")
+#SparRaster
+f <- system.file('extdata/Bdesert_spatRast.rda', package = 'npphen')
+Bdesert <- readRDS(f)
 
 # Generate a Raster time series using a raster stack and a date database from Northern Chile
 # Obtain data from a particular pixel generating a time series
-bd_pixel<-cellFromXY(Bdesert_stack,c(286638,6852107))
-bd_pixelts<-as.numeric(Bdesert_stack[bd_pixel])
+bd_pixel<-cellFromXY(Bdesert,cbind(286638,6852107))
+bd_pixelts<-as.numeric(Bdesert[bd_pixel])
 plot(modis_dates,bd_pixelts, type = 'l')
 
 # Phenology for the given pixel

@@ -6,10 +6,10 @@
 \title{ExtremeAnoMap}
 \usage{
 ExtremeAnoMap(s, dates, h, refp, anop, rge, output = "both", rfd = 0.9,
-  nCluster, outname, format, datatype)
+  nCluster, outname, datatype)
 }
 \arguments{
-\item{s}{Raster stack. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior.The code has been optimized to work with integer values. Please re-scale the input raster stack if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000).}
+\item{s}{SpatRaster. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior.The code has been optimized to work with integer values. Please re-scale the input raster stack if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000).}
 
 \item{dates}{A date vector. The number of dates must be equal to the number of layers of raster stack.}
 
@@ -27,14 +27,12 @@ ExtremeAnoMap(s, dates, h, refp, anop, rge, output = "both", rfd = 0.9,
 
 \item{nCluster}{Numeric. Number of CPU cores to be used for computational calculations}
 
-\item{outname}{Character vector with the output path and filename with extension or only the filename and extension if work directory was set. For example outname ="output_anom.tif". See \code{\link{writeRaster}}}
+\item{outname}{Character vector with the output path and filename with extension or only the filename and extension if work directory was set. For example outname ="output_anom.tif". See \code{\link[terra]{writeRaster}}}
 
-\item{format}{Character. Output file type. See \code{\link{writeFormats}}}
-
-\item{datatype}{Character. Output data type. See \code{\link{dataType}}}
+\item{datatype}{Character. Output data type. See \code{\link[terra]{writeRaster}}}
 }
 \value{
-RasterStack
+SpatRaster
 }
 \description{
 Based on the annual reference frequency distribution of a vegetation index time series (e.g. a raster stack of NDVI), calculates anomalies and how extreme these anomalies are (rfd position ranging from 0 to 100).
@@ -50,37 +48,38 @@ Similar to \code{\link{ExtremeAnom}}, it calculates phenological anomalies but u
 #showing extreme negative anomalies (browning)##
 
 # Load data
-#RasterStack
-data("MegaDrought_stack")
+
+#SpatRaster
+library(terra)
+f <- system.file('extdata/MegaDrought_spatRast.rda', package = 'npphen')
+MegaDrought <- readRDS(f)
 #Dates
 data("modis_dates")
 
-library(snow)
-
 # Define the number of cores to be use. In this example we use 1
 nc1 <- 1
-ExtremeAnoMap(s=MegaDrought_stack,dates=modis_dates,h=2,refp = c(1:423), 
+ExtremeAnoMap(s=MegaDrought,dates=modis_dates,h=2,refp = c(1:423), 
 anop = c(884:929),rfd = 0.9,output = 'both',nCluster=nc1,outname="anomRFD_MD.tif",
-format="GTiff", datatype="INT2S", rge=c(0,10000))
+datatype="INT2S", rge=c(0,10000))
 #map_an1 <- stack("anomRFD_MD.tif")#run only for load anomaly brick
 #plot(map_an1)
-
 
 ## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI), 
 #showing extreme positive anomalies (greening)##
 
 # Load data
-RasterStack
-data("Bdesert_stack")
+SpatRaster
+f <- system.file('extdata/Bdesert_spatRast.rda', package = 'npphen')
+Bdesert <- readRDS(f)
 #Dates
 data("modis_dates")
 
 # Define the number of cores to be use. In this example we use 1
 nc1 <- 1
 
-ExtremeAnoMap(s=Bdesert_stack,dates=modis_dates,h=2,refp = c(1:423), 
+ExtremeAnoMap(s=Bdesert,dates=modis_dates,h=2,refp = c(1:423), 
 anop = c(723:768),rfd = 0.9,output = 'both',nCluster=nc1,outname="anomRFD_BD.tif",
-format="GTiff", datatype="INT2S", rge=c(0,10000))
+datatype="INT2S", rge=c(0,10000))
 #map_an1 <- stack("anomRFD_BD.tif")#run only for load anomaly brick
 #plot(map_an1)
 

@@ -21,19 +21,18 @@
 #' }
 #' \donttest{
 #' library(lubridate)
-#'
+#' library(terra)
 #' ## Testing raster data from Central Chile (NDVI), h=2##
-#'
 #' # Load data
-#' #RasterStack
-#' data("MegaDrought_stack")
+#' f <- system.file('extdata/MegaDrought_spatRast.rda', package = 'npphen')
+#' MegaDrought <- readRDS(f)
 #' #Dates
 #' data("modis_dates")
 #'
 #' # Generate a Raster time series using a raster stack and a date database from Central Chile
 #' # Obtain data from a particular pixel generating a time series
-#' md_pixel <- cellFromXY(MegaDrought_stack,c(313395,6356610))
-#' md_pixelts <- as.numeric(MegaDrought_stack[md_pixel])
+#' md_pixel <- cellFromXY(MegaDrought,cbind(313395,6356610))
+#' md_pixelts <- as.numeric(MegaDrought[md_pixel])
 #' plot(modis_dates,md_pixelts, type='l')
 #'
 #' # Phenology for the given pixel
@@ -43,15 +42,14 @@
 #' ## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI), h=2 ##
 #'
 #' # Load data
-#' #RasterStack
-#' data("Bdesert_stack")
-#' #Dates
-#' data("modis_dates")
+#' #SparRaster
+#' f <- system.file('extdata/Bdesert_spatRast.rda', package = 'npphen')
+#' Bdesert <- readRDS(f)
 #'
 #' # Generate a Raster time series using a raster stack and a date database from Northern Chile
 #' # Obtain data from a particular pixel generating a time series
-#' bd_pixel<-cellFromXY(Bdesert_stack,c(286638,6852107))
-#' bd_pixelts<-as.numeric(Bdesert_stack[bd_pixel])
+#' bd_pixel<-cellFromXY(Bdesert,cbind(286638,6852107))
+#' bd_pixelts<-as.numeric(Bdesert[bd_pixel])
 #' plot(modis_dates,bd_pixelts, type = 'l')
 #'
 #' # Phenology for the given pixel
@@ -71,7 +69,7 @@ PhenKplot <-
     if (all(is.na(x))) {
       return(rep(NA,nGS))
     }
-    DOY <- yday(dates)
+    DOY <- lubridate::yday(dates)
     DOY[which(DOY==366)]<-365
     D1<-cbind(DOY,x)
     if(length(unique(D1[,2]))<10 | (nrow(D1)-sum(is.na(D1)))<(0.1*nrow(D1))) { 
@@ -84,9 +82,9 @@ PhenKplot <-
       for(i in 1:nrow(D1)){
         D1[i,1]<-DOGS[which(DOGS[,1]==D1[i,1],arr.ind=TRUE),2]}}
 
-    Hmat<-Hpi(na.omit(D1))
+    Hmat<-ks::Hpi(na.omit(D1))
     Hmat[1,2]<-Hmat[2,1]
-    K1<-kde(na.omit(D1),H=Hmat,xmin=c(1,rge[1]),xmax=c(365,rge[2]),gridsize=c(365,500))
+    K1<-ks::kde(na.omit(D1),H=Hmat,xmin=c(1,rge[1]),xmax=c(365,rge[2]),gridsize=c(365,500))
     K1Con<-K1$estimate
     
     for(j in 1:365){ 
@@ -115,8 +113,8 @@ PhenKplot <-
     h2d$cumDensity <- matrix(nrow = nrow(h2d$density), ncol = ncol(h2d$density))
     h2d$cumDensity[] <- cumProbs[as.character(h2d$density)]
 
-    image(h2d$x, h2d$y, h2d$cumDensity, xlab=xlab, ylab=ylab, font.lab=2, breaks = c(0,0.5, 0.75, 0.9,0.95),col=heat.colors(n=4,alpha=0.6))
-    contour(h2d$x, h2d$y, h2d$cumDensity, levels = c(0,0.5, 0.75, 0.9,0.95),add=T,col=grey(0.25),labcex=1)
+    image(h2d$x, h2d$y, h2d$cumDensity, xlab=xlab, ylab=ylab, font.lab=2, breaks = c(0,0.5, 0.75, 0.9,0.95),col=grDevices::heat.colors(n=4,alpha=0.6))
+    contour(h2d$x, h2d$y, h2d$cumDensity, levels = c(0,0.5, 0.75, 0.9,0.95),add=T,col=grDevices::grey(0.25),labcex=1)
     lines(seq(1,365),MAXY,lwd=3,col='dark red')
 }
 

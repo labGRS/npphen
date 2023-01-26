@@ -55,19 +55,18 @@ abline(h=0)
 
 \donttest{
 library(lubridate)
-
-## Testing with the MegaDrought_stack from Central Chile (NDVI), 
-#showing extreme negative anomalies (browning)##
-
+library(terra)
+## Testing raster data from Central Chile (NDVI), h=2##
 # Load data
-#RasterStack
-data("MegaDrought_stack")
+f <- system.file('extdata/MegaDrought_spatRast.rda', package = 'npphen')
+MegaDrought <- readRDS(f)
 #Dates
 data("modis_dates")
 
-# Extracting a time series from a particular pixel
-md_pixel <- cellFromXY(MegaDrought_stack,c(313395,6356610))
-md_pixelts <- as.numeric(MegaDrought_stack[md_pixel])
+# Generate a Raster time series using a raster stack and a date database from Central Chile
+# Obtain data from a particular pixel generating a time series
+md_pixel <- cellFromXY(MegaDrought,cbind(313395,6356610))
+md_pixelts <- as.numeric(MegaDrought[md_pixel])
 plot(modis_dates,md_pixelts, type='l')
 
 # Anomaly detection for the given pixel
@@ -87,14 +86,14 @@ abline(h=0)
 #showing extreme positive anomalies (greening)##
 
 # Load data
-#RasterStack
-data("Bdesert_stack")
-#Dates
-data("modis_dates")
+#SparRaster
+f <- system.file('extdata/Bdesert_spatRast.rda', package = 'npphen')
+Bdesert <- readRDS(f)
 
-# Extracting a time series from a particular pixel
-bd_pixel<-cellFromXY(Bdesert_stack,c(286638,6852107))
-bd_pixelts<-as.numeric(Bdesert_stack[bd_pixel])
+# Generate a Raster time series using a raster stack and a date database from Northern Chile
+# Obtain data from a particular pixel generating a time series
+bd_pixel<-cellFromXY(Bdesert,cbind(286638,6852107))
+bd_pixelts<-as.numeric(Bdesert[bd_pixel])
 plot(modis_dates,bd_pixelts, type = 'l')
 
 # Anomaly detection for the given pixel

@@ -36,19 +36,18 @@
 #'
 #' \donttest{
 #' library(lubridate)
-#'
-#' ## Testing with the MegaDrought_stack from Central Chile (NDVI), 
-#' #showing extreme negative anomalies (browning)##
-#'
+#' library(terra)
+#' ## Testing raster data from Central Chile (NDVI), h=2##
 #' # Load data
-#' #RasterStack
-#' data("MegaDrought_stack")
+#' f <- system.file('extdata/MegaDrought_spatRast.rda', package = 'npphen')
+#' MegaDrought <- readRDS(f)
 #' #Dates
 #' data("modis_dates")
 #'
-#' # Extracting a time series from a particular pixel
-#' md_pixel <- cellFromXY(MegaDrought_stack,c(313395,6356610))
-#' md_pixelts <- as.numeric(MegaDrought_stack[md_pixel])
+#' # Generate a Raster time series using a raster stack and a date database from Central Chile
+#' # Obtain data from a particular pixel generating a time series
+#' md_pixel <- cellFromXY(MegaDrought,cbind(313395,6356610))
+#' md_pixelts <- as.numeric(MegaDrought[md_pixel])
 #' plot(modis_dates,md_pixelts, type='l')
 #'
 #' # Anomaly detection for the given pixel
@@ -68,14 +67,14 @@
 #' #showing extreme positive anomalies (greening)##
 #'
 #' # Load data
-#' #RasterStack
-#' data("Bdesert_stack")
-#' #Dates
-#' data("modis_dates")
+#' #SparRaster
+#' f <- system.file('extdata/Bdesert_spatRast.rda', package = 'npphen')
+#' Bdesert <- readRDS(f)
 #'
-#' # Extracting a time series from a particular pixel
-#' bd_pixel<-cellFromXY(Bdesert_stack,c(286638,6852107))
-#' bd_pixelts<-as.numeric(Bdesert_stack[bd_pixel])
+#' # Generate a Raster time series using a raster stack and a date database from Northern Chile
+#' # Obtain data from a particular pixel generating a time series
+#' bd_pixel<-cellFromXY(Bdesert,cbind(286638,6852107))
+#' bd_pixelts<-as.numeric(Bdesert[bd_pixel])
 #' plot(modis_dates,bd_pixelts, type = 'l')
 #'
 #' # Anomaly detection for the given pixel
@@ -121,7 +120,7 @@ ExtremeAnom <- function(x,dates,h,refp,anop,rge, output = 'both',rfd = 0.90){
     return(rep(NA,ano.len))
   }
   
-  DOY <- yday(dates)
+  DOY <- lubridate::yday(dates)
   DOY[which(DOY==366)]<-365
   D1<-cbind(DOY[ref.min:ref.max],x[ref.min:ref.max])
   D2<-cbind(DOY[ano.min:ano.max],x[ano.min:ano.max])
@@ -147,9 +146,9 @@ ExtremeAnom <- function(x,dates,h,refp,anop,rge, output = 'both',rfd = 0.90){
     for(i in 1:nrow(D1)){
       D1[i,1]<-DOGS[which(DOGS[,1]==D1[i,1],arr.ind=TRUE),2]}}
   
-  Hmat<-Hpi(na.omit(D1))
+  Hmat<-ks::Hpi(na.omit(D1))
   Hmat[1,2]<-Hmat[2,1]
-  K1<-kde(na.omit(D1),H=Hmat,xmin=c(1,rge[1]),xmax=c(365,rge[2]),gridsize=c(365,500))
+  K1<-ks::kde(na.omit(D1),H=Hmat,xmin=c(1,rge[1]),xmax=c(365,rge[2]),gridsize=c(365,500))
   K1Con<-K1$estimate
   for(j in 1:365){
     Kdiv<-sum(K1$estimate[j,])

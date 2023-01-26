@@ -5,11 +5,10 @@
 \alias{PhenMap}
 \title{PhenMap}
 \usage{
-PhenMap(s, dates, h, frequency = "16-days", nCluster, outname, format,
-  datatype, rge)
+PhenMap(s, dates, h, frequency = "16-days", nCluster, outname, datatype, rge)
 }
 \arguments{
-\item{s}{Raster stack of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input raster stack if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000}
+\item{s}{SpatRaster of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input raster stack if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000}
 
 \item{dates}{A date vector. The number of dates must be equal to the number of "x" values (numeric input vector).}
 
@@ -19,16 +18,14 @@ PhenMap(s, dates, h, frequency = "16-days", nCluster, outname, format,
 
 \item{nCluster}{Numeric. Number of CPU cores to be used for computational calculations}
 
-\item{outname}{Character vector with the output path and filename with extension or only the filename and extension if work directory was set. For example outname = "output_phen.tif". See \code{\link{writeRaster}}}
+\item{outname}{Character vector with the output path and filename with extension or only the filename and extension if work directory was set. For example outname = "output_phen.tif". See \code{\link[terra]{writeRaster}}}
 
-\item{format}{Character. Output file type. See \code{\link{writeFormats}}}
-
-\item{datatype}{Character. Output data type. See \code{\link{dataType}}}
+\item{datatype}{Character. Output data type. See \code{\link[terra]{writeRaster}}}
 
 \item{rge}{A vector containing minimum and maximum values of the response variable used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge =c(0,10000)}
 }
 \value{
-RasterStack
+SpatRaster
 }
 \description{
 Estimates annual Land Surface Phenology (LSP) using time series of a vegetation greenness raster stack.
@@ -43,29 +40,30 @@ Derives the annual Land Surface Phenological (LSP) cycle for a standard growing 
 ## Testing raster data from Central Chile (NDVI), h=2##
 
 # Load data
-#RasterStack
-data("MegaDrought_stack")
+#SpatRaster
+library(terra)
+f <- system.file('extdata/MegaDrought_spatRast.rda', package = 'npphen')
+MegaDrought <- readRDS(f)
 #Dates
 data("modis_dates")
 
 # Making the LSP raster, n bands = 23
 
-library(snow)
-
 # Define the number of cores to be use. In this example we use 1
 nc1<-1
 
-PhenMap(s = MegaDrought_stack,dates = modis_dates,h = 2,
-frequency = '16-days',nCluster = nc1,outname = 'phen_MD.tif',
-format = 'GTiff',datatype = 'INT2S',rge = c(0,10000))
-#map1 <- stack("phen_MD.tif")#run only for load phenology brick
+PhenMap(s = MegaDrought,dates = modis_dates,h = 2,
+frequency = '16-days',nCluster = nc1,outname = 'phen_MD.tif', 
+datatype = 'INT2S',rge = c(0,10000))
+#map1 <- rast("phen_MD.tif")#run only for load phenology brick
 #plot(map1)
 
 ## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI), h=2 ##
 
 # Load data
-RasterStack
-data("Bdesert_stack")
+SpatRaster
+f <- system.file('extdata/Bdesert_spatRast.rda', package = 'npphen')
+Bdesert <- readRDS(f)
 #Dates
 data("modis_dates")
 
@@ -73,10 +71,10 @@ data("modis_dates")
 # Define the number of cores to be use. In this example we use 1
 nc1<-1
 
-PhenMap(s= Bdesert_stack,dates=modis_dates,h=2,
-frequency='16-days', nCluster=nc1,outname="phen_BD.tif", 
-format="GTiff", datatype="INT2S",rge=c(0,10000))
-#map2 <- stack("phen_BD.tif") #run only for load phenology brick
+PhenMap(s= Bdesert,dates=modis_dates,h=2,
+frequency='16-days', nCluster=1,outname="phen_BD.tif", 
+datatype="INT2S",rge=c(0,10000))
+#map2 <- rast("phen_BD.tif") #run only for load phenology brick
 #plot(map2)
 }
 }

@@ -6,8 +6,8 @@
 #' @param h Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h=1 if the vegetation is in the Northern Hemisphere (season starting at January 1st), h=2 if it is in the Southern Hemisphere (season starting at July 1st)
 #' @param frequency Character string. Defines the number of samples for the output phenology and must be one of the this: 'daily' giving output vector of length 365, '8-days' giving output vector of length 46 (i.e MOD13Q1 and MYD13Q1), 'monthly' giving output vector of length 12,'bi-weekly' giving output vector of length 24 (i.e. GIMMS) or '16-days' (default) giving output vector of length 23 (i.e MOD13Q1 or MYD13Q1).
 #' @param nCluster Numeric. Number of CPU cores to be used for computational calculations
-#' @param outname Character vector with the output path and filename with extension or only the filename and extension if work directory was set. For example outname = "output_phen.tif". See \code{\link{writeRaster}}
-#' @param datatype Character. Output data type. See \code{\link{dataType}}
+#' @param outname Character vector with the output path and filename with extension or only the filename and extension if work directory was set. For example outname = "output_phen.tif". See \code{\link[terra]{writeRaster}}
+#' @param datatype Character. Output data type. See \code{\link[terra]{writeRaster}}
 #' @param rge  A vector containing minimum and maximum values of the response variable used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge =c(0,10000)
 #' @details Derives the annual Land Surface Phenological (LSP) cycle for a standard growing season using a raster stack of satellite based greenness values such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). The LSP cycle is calculated for all pixels of the input raster stack in the same way as for the \code{\link{Phen}} function. The output is a multiband raster where every band is the expected greenness value at a given time step of the standard growing season. For example, for MODIS Vegetation Index 16-days composites the number of time steps of the growing season is 23 (frequency = "16-days"), and therefore, the output raster will have 23 bands. A vector with dates for the greenness values is also required.
 #' @return SpatRaster
@@ -20,7 +20,9 @@
 #'
 #' # Load data
 #' #SpatRaster
-#' MegaDrought <- readRDS('data/MegaDrought_spatRast.rda')
+#' library(terra)
+#' f <- system.file('extdata/MegaDrought_spatRast.rda', package = 'npphen')
+#' MegaDrought <- readRDS(f)
 #' #Dates
 #' data("modis_dates")
 #'
@@ -39,7 +41,8 @@
 #'
 #' # Load data
 #' SpatRaster
-#' Bdesert <- readRDS('data/Bdesert_spatRast.rda')
+#' f <- system.file('extdata/Bdesert_spatRast.rda', package = 'npphen')
+#' Bdesert <- readRDS(f)
 #' #Dates
 #' data("modis_dates")
 #'
@@ -89,7 +92,7 @@ PhenMap <-
         return(rep(NA,nGS))
       }
       
-      DOY <- yday(dates)
+      DOY <- lubridate::yday(dates)
       DOY[which(DOY==366)]<-365
       D1<-cbind(DOY,x)
       if(length(unique(D1[,2]))<10 | (nrow(D1)-sum(is.na(D1)))<(0.1*nrow(D1))) {
@@ -102,9 +105,9 @@ PhenMap <-
         for(i in 1:nrow(D1)){
           D1[i,1]<-DOGS[which(DOGS[,1]==D1[i,1],arr.ind=TRUE),2]}}
       
-      Hmat<-Hpi(na.omit(D1))
+      Hmat<-ks::Hpi(na.omit(D1))
       Hmat[1,2]<-Hmat[2,1]
-      K1<-kde(na.omit(D1),H=Hmat,xmin=c(1,rge[1]),xmax=c(365,rge[2]),gridsize=c(365,500))
+      K1<-ks::kde(na.omit(D1),H=Hmat,xmin=c(1,rge[1]),xmax=c(365,rge[2]),gridsize=c(365,500))
       K1Con<-K1$estimate
       
       for(j in 1:365){

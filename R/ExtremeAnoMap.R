@@ -10,8 +10,8 @@
 #' @param output Character string. Defines the output values. 'both' (default) returns both anomalies and rfd position together as a single numeric vector, 'anomalies' returns only anomalies, 'rfd' returns only rfd values (how extreme the anomalies are) and 'clean' returns only extreme anomalies, i.e. anomalies at which a given rfd is overpass (e.g. 0.90). This critical threshold is set by the users using the rfd argument.
 #' @param rfd Numeric. This argument only applies when the argument output='clean'. It defines the percentile (from 0 to 0.99) of the reference frequency distribution, for which anomalies are not flagged as extreme anomalies. For example, if 'rfd = 0.90' only anomalies falling outside the '0.90 rfd' (default value) will be flagged as extreme anomalies while the rest will be neglected (NA values). Please notice that'rfd = 0.90' implies that the 5\% of the most extreme positive and 5\% of the most extreme negative anomalies will be considered.
 #' @param nCluster	Numeric. Number of CPU cores to be used for computational calculations
-#' @param outname	Character vector with the output path and filename with extension or only the filename and extension if work directory was set. For example outname ="output_anom.tif". See \code{\link{writeRaster}}
-#' @param datatype	Character. Output data type. See \code{\link{dataType}}
+#' @param outname	Character vector with the output path and filename with extension or only the filename and extension if work directory was set. For example outname ="output_anom.tif". See \code{\link[terra]{writeRaster}}
+#' @param datatype	Character. Output data type. See \code{\link[terra]{writeRaster}}
 #' @details Similar to \code{\link{ExtremeAnom}}, it calculates phenological anomalies but using a raster stack instead of a numeric vector of vegetation canopy greenness values (e.g. Leaf Area Index, LAI) or satellite based greenness proxies such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). For this purpose, it divides the time series (raster stack) of vegetation greenness into 2: the reference period, from which the annual phenological cycle is calculated (same as \code{\link{PhenMap}} function), and the observation period, for which we want to calculate anomalies with respect to the annual phenological cycle. Negative anomalies correspond to observed values lower than the reference and positive anomalies to values higher than the reference. his anomalies can be filtered by the position of the observation within the historical rfd. Users can, for example, set 'rfd = 0.95' to consider only anomalies that outside the 95\% rfd of historical records.
 #' @return SpatRaster
 #' @seealso \code{\link{ExtremeAnom}}
@@ -23,8 +23,11 @@
 #' #showing extreme negative anomalies (browning)##
 #'
 #' # Load data
+#' 
 #' #SpatRaster
-#' MegaDrought <- readRDS('data/MegaDrought_spatRast.rda')
+#' library(terra)
+#' f <- system.file('extdata/MegaDrought_spatRast.rda', package = 'npphen')
+#' MegaDrought <- readRDS(f)
 #' #Dates
 #' data("modis_dates")
 #'
@@ -40,8 +43,9 @@
 #' #showing extreme positive anomalies (greening)##
 #'
 #' # Load data
-#' RasterStack
-#' Bdesert <- readRDS('data/Bdesert_spatRast.rda')
+#' SpatRaster
+#' f <- system.file('extdata/Bdesert_spatRast.rda', package = 'npphen')
+#' Bdesert <- readRDS(f)
 #' #Dates
 #' data("modis_dates")
 #'
@@ -86,7 +90,7 @@ ExtremeAnoMap <-
         return(rep(NA,ano.len))
       }
       
-      DOY <- yday(dates)
+      DOY <- lubridate::yday(dates)
       DOY[which(DOY==366)]<-365
       D1<-cbind(DOY[ref.min:ref.max],x[ref.min:ref.max])
       D2<-cbind(DOY[ano.min:ano.max],x[ano.min:ano.max])
@@ -112,9 +116,9 @@ ExtremeAnoMap <-
         for(i in 1:nrow(D1)){
           D1[i,1]<-DOGS[which(DOGS[,1]==D1[i,1],arr.ind=TRUE),2]}}
       
-      Hmat<-Hpi(na.omit(D1))
+      Hmat<-ks::Hpi(na.omit(D1))
       Hmat[1,2]<-Hmat[2,1]
-      K1<-kde(na.omit(D1),H=Hmat,xmin=c(1,rge[1]),xmax=c(365,rge[2]),gridsize=c(365,500))
+      K1<-ks::kde(na.omit(D1),H=Hmat,xmin=c(1,rge[1]),xmax=c(365,rge[2]),gridsize=c(365,500))
       K1Con<-K1$estimate
       for(j in 1:365){
         Kdiv<-sum(K1$estimate[j,])
