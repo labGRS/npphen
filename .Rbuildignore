@@ -5,3 +5,6 @@
 ^\.github$
 ^README\.md$
 ^man/figures$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
