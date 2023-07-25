@@ -16,7 +16,11 @@ Description: Calculates phenological cycle and anomalies using a non-parametric
 License: GPL (>= 3)
 Depends: R (>= 3.6.0)
 Imports: terra (>= 1.5-17), ks, methods, graphics, stats, lubridate
-Suggests: parallel, tcltk, leaflet, sf
+Suggests: 
+    parallel,
+    tcltk,
+    leaflet,
+    sf
 Encoding: UTF-8
 URL: https://github.com/labGRS
 BugReports: https://github.com/labGRS/npphen/issues
