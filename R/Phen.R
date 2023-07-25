@@ -6,6 +6,7 @@
 #' @param h Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h=1 if the vegetation is in the Northern Hemisphere (season starting at January 1st), h=2 if it is in the Southern Hemisphere (season starting at July 1st)
 #' @param frequency Character string. Defines the number of samples for the output phenology and must be one of the this: 'daily' giving output vector of length 365, '8-days' giving output vector of length 46 (i.e MOD13Q1 and MYD13Q1), 'monthly' giving output vector of length 12,'bi-weekly' giving output vector of length 24 (i.e. GIMMS) or '16-days' (default) giving output vector of length 23 (i.e MOD13Q1 or MYD13Q1).
 #' @param rge Numeric vector with two values setting the minimum and maximum values of the response variable (e.g. NDVI) used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge = c(0,10000)
+#' @param plot Logical. Set TRUE (default) or FALSE to show the phenology curve plot.
 #' @details Derives the annual phenological cycle for a standard growing season using a numeric vector of vegetation canopy greenness values (e.g. Leaf Area Index, LAI) or satellite based greenness proxies such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). A vector with dates for the greenness values is also required.
 #' @return A numeric vector, where each value represents the expected greeness at that date
 #' @seealso \code{\link{PhenMap}},\code{\link{PhenKplot}}
@@ -63,7 +64,7 @@
 #' @export
 
 Phen <-
-  function(x, dates, h, frequency = "16-days", rge) {
+  function(x, dates, h, frequency = "16-days", rge, plot = T) {
     if (length(rge) != 2) {
       stop("rge must be a vector of length 2")
     }
@@ -169,8 +170,10 @@ Phen <-
     if (h == 2) {
       id.label <- "DGS"
     }
-    plot(select_DGS, Ref, xlab = id.label, ylab = "VI", font.lab = 2, type = "l")
-    axis(1, at = seq(0, 365, 50))
+    if(isTRUE(plot)) {
+      plot(select_DGS, Ref, xlab = id.label, ylab = "VI", font.lab = 2, type = "l")
+      axis(1, at = seq(0, 365, 50))
+    }
 
     names(Ref) <- select_DGS
     Ref
