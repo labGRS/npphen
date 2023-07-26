@@ -62,94 +62,107 @@ PhenMap <-
   function(s,dates,h,frequency='16-days',nCluster,outname,datatype,rge) {
     ff <- function(x) {
       
-      if(length(rge)!=2){stop("rge must be a vector of length 2")}
-      if(rge[1]>rge[2]){stop("rge vector order must be minimum/maximum")}
-      if(length(dates)!=length(x)){stop("N of dates and files do not match")}
-      if(frequency == 'daily'){
+      if (length(rge) != 2) {
+        stop("rge must be a vector of length 2")
+      }
+      if (rge[1] > rge[2]) {
+        stop("rge vector order must be minimum/maximum")
+      }
+      if (length(dates) != length(x)) {
+        stop("N of dates and files do not match")
+      }
+      
+      freq.method <- match(frequency, c(
+        "daily", "8-days", "16-days",
+        "bi-weekly", "monthly"
+      ))
+      if (is.na(freq.method)) {
+        stop("Invalid frequency. Must be one of: daily, 8-days, 16-days, bi-weekly or monthly")
+      }
+      if (frequency == "daily") {
         nGS <- 365
       }
-      if(frequency == '8-days'){
+      if (frequency == "8-days") {
         nGS <- 46
       }
-      if(frequency == '16-days'){
+      if (frequency == "16-days") {
         nGS <- 23
       }
-      if(frequency == 'monthly'){
+      if (frequency == "monthly") {
         nGS <- 12
       }
-      if(frequency == 'bi-weekly'){
+      if (frequency == "bi-monthly") {
         nGS <- 24
       }
       if (all(is.na(x))) {
-        return(rep(NA,nGS))
+        return(rep(NA, nGS))
+      }
+      if (all(x < rge[1]) | all(x > rge[2], na.rm = T)) {
+        return(rep(NA, nGS))
       }
       
-      freq.method <- match(frequency, c("daily", "8-days", "16-days", 
-                                         "bi-weekly", "monthly"))
-      if (is.na(freq.method)){ 
-        stop("Invalid frequency. Must be one of: daily, 8-days, 16-days, bi-weekly or monthly")}
-      if (all(is.na(x))) {
-        return(rep(NA,nGS))
+      DOY <- yday(dates)
+      DOY[which(DOY == 366)] <- 365
+      D1 <- cbind(DOY, x)
+      if (length(unique(D1[, 2])) < 10 | (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1))) {
+        return(rep(NA, nGS))
       }
       
-      DOY <- lubridate::yday(dates)
-      DOY[which(DOY==366)]<-365
-      D1<-cbind(DOY,x)
-      if(length(unique(D1[,2]))<10 | (nrow(D1)-sum(is.na(D1)))<(0.1*nrow(D1))) {
-        return(rep(NA,nGS))
+      if (h != 1 && h != 2) {
+        stop("Invalid h")
       }
-
-      if(h!=1 && h!=2){stop("Invalid h")}
-      DOGS<-cbind(seq(1,365),c(seq(185,365),seq(1,184)))
-      if(h==2){
-        for(i in 1:nrow(D1)){
-          D1[i,1]<-DOGS[which(DOGS[,1]==D1[i,1],arr.ind=TRUE),2]}}
-      
-      Hmat<-ks::Hpi(na.omit(D1))
-      Hmat[1,2]<-Hmat[2,1]
-      K1<-ks::kde(na.omit(D1),H=Hmat,xmin=c(1,rge[1]),xmax=c(365,rge[2]),gridsize=c(365,500))
-      K1Con<-K1$estimate
-      
-      for(j in 1:365){
-        Kdiv<-sum(K1$estimate[j,])
-        ifelse(Kdiv==0,K1Con[j,]<-0,K1Con[j,]<-K1$estimate[j,]/sum(K1$estimate[j,]))}
-      
-      MAXY<-apply(K1Con,1,max)
-      for(i in 1:365){ 
-        n.select <- which(K1Con[i,]==MAXY[i],arr.ind=TRUE)
-        if(length(n.select) > 1){
-          n <- n.select[1]
-          MAXY[i]<-NA}
-        if(length(n.select) == 1){
-          n <- n.select
-          MAXY[i]<-median(K1$eval.points[[2]][n])
+      DOGS <- cbind(seq(1, 365), c(seq(185, 365), seq(1, 184)))
+      if (h == 2) {
+        for (i in 1:nrow(D1)) {
+          D1[i, 1] <- DOGS[which(DOGS[, 1] == D1[i, 1], arr.ind = TRUE), 2]
         }
       }
       
-      if(frequency == 'daily'){
-        select_DGS <- seq(1,365,1)
+      Hmat <- Hpi(na.omit(D1))
+      Hmat[1, 2] <- Hmat[2, 1]
+      K1 <- kde(na.omit(D1), H = Hmat, xmin = c(1, rge[1]), xmax = c(365, rge[2]), gridsize = c(365, 500))
+      K1Con <- K1$estimate
+      
+      for (j in 1:365) {
+        Kdiv <- sum(K1$estimate[j, ])
+        ifelse(Kdiv == 0, K1Con[j, ] <- 0, K1Con[j, ] <- K1$estimate[j, ] / sum(K1$estimate[j, ]))
+      }
+      
+      MAXY <- apply(K1Con, 1, max)
+      for (i in 1:365) {
+        n.select <- which(K1Con[i, ] == MAXY[i], arr.ind = TRUE)
+        if (length(n.select) > 1) {
+          n <- n.select[1]
+          MAXY[i] <- NA
+        }
+        if (length(n.select) == 1) {
+          n <- n.select
+          MAXY[i] <- median(K1$eval.points[[2]][n])
+        }
+      }
+      
+      if (frequency == "daily") {
+        select_DGS <- seq(1, 365, 1)
         Ref <- MAXY
       }
-      if(frequency == '8-days'){
-        select_DGS <- seq(1,365,8)
+      if (frequency == "8-days") {
+        select_DGS <- seq(1, 365, 8)
         Ref <- MAXY[select_DGS]
       }
-      if(frequency == '16-days'){
-        select_DGS <- seq(1,365,16)
+      if (frequency == "16-days") {
+        select_DGS <- seq(1, 365, 16)
         Ref <- MAXY[select_DGS]
       }
-      if(frequency == 'monthly'){
-        select_DGS <- c(15,46,74,105,135,166,196,227,258,288,319,349)
+      if (frequency == "monthly") {
+        select_DGS <- c(15, 46, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349)
         Ref <- MAXY[select_DGS]
       }
-      if(frequency == 'bi-weekly'){
-        select_DGS <- c(1,15,32,46,60,74,91,105,121,135,152,166,182,196,213,227,244,258,274,288,305,319,335,349)
+      if (frequency == "bi-weekly") {
+        select_DGS <- c(1, 15, 32, 46, 60, 74, 91, 105, 121, 135, 152, 166, 182, 196, 213, 227, 244, 258, 274, 288, 305, 319, 335, 349)
         Ref <- MAXY[select_DGS]
       }
-      if(h==1){id.label <- 'DOY'}
-      if(h==2){id.label <- 'DGS'}
-
-      names(Ref) <- select_DGS 
+     
+      names(Ref) <- select_DGS
       Ref
     }
     app(s, fun = ff, filename = outname, cores = nCluster, overwrite = T, wopt = list(datatype = datatype))
