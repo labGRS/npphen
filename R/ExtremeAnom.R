@@ -156,12 +156,13 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
   D1 <- cbind(DOY[ref.min:ref.max], x[ref.min:ref.max])
   D2 <- cbind(DOY[ano.min:ano.max], x[ano.min:ano.max])
 
-  if (length(unique(D1[, 2])) < 10 | (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1)) & output == "both") {
+  if (length(unique(D1[, 2])) < 10 | (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1))) {
+    if(output == "both"){
     return(rep(NA, len2))
-  }
-
-  if (length(unique(D1[, 2])) < 10 | (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1)) & output %in% c("clean", "anomalies", "rfd")) {
-    return(rep(NA, ano.len))
+    }
+    if(output %in% c("clean", "anomalies", "rfd")){
+      return(rep(NA, ano.len))
+    }
   }
 
   if (all(is.na(D2[, 2])) & output == "both") {
