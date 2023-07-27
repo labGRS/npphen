@@ -17,54 +17,56 @@
 #' @seealso \code{\link{ExtremeAnom}}
 #' @examples
 #' \dontrun{
-#' ##DEPENDING ON HARDWARE, THIS PROCESS CAN BE HIGHLY TIME CONSUMING##
+#' ## DEPENDING ON HARDWARE, THIS PROCESS CAN BE HIGHLY TIME CONSUMING##
 #'
-#' ## Testing with the MegaDrought_stack from Central Chile (NDVI), 
-#' #showing extreme negative anomalies (browning)##
+#' ## Testing with the MegaDrought_stack from Central Chile (NDVI),
+#' # showing extreme negative anomalies (browning)##
 #'
 #' # Load data
-#' 
-#' #SpatRaster
+#'
+#' # SpatRaster
 #' library(terra)
-#' f <- system.file('extdata/MegaDrought_spatRast.rda', package = 'npphen')
+#' f <- system.file("extdata/MegaDrought_spatRast.rda", package = "npphen")
 #' MegaDrought <- readRDS(f)
-#' #Dates
+#' # Dates
 #' data("modis_dates")
 #'
 #' # Define the number of cores to be use. In this example we use 1
 #' nc1 <- 1
-#' ExtremeAnoMap(s=MegaDrought,dates=modis_dates,h=2,refp = c(1:423), 
-#' anop = c(884:929),rfd = 0.9,output = 'both',nCluster=nc1,outname="anomRFD_MD.tif",
-#' datatype="INT2S", rge=c(0,10000))
-#' #map_an1 <- stack("anomRFD_MD.tif")#run only for load anomaly brick
-#' #plot(map_an1)
+#' ExtremeAnoMap(
+#'   s = MegaDrought, dates = modis_dates, h = 2, refp = c(1:423),
+#'   anop = c(884:929), rfd = 0.9, output = "both", nCluster = nc1, outname = "anomRFD_MD.tif",
+#'   datatype = "INT2S", rge = c(0, 10000)
+#' )
+#' # map_an1 <- stack("anomRFD_MD.tif")#run only for load anomaly brick
+#' # plot(map_an1)
 #'
-#' ## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI), 
-#' #showing extreme positive anomalies (greening)##
+#' ## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI),
+#' # showing extreme positive anomalies (greening)##
 #'
 #' # Load data
 #' SpatRaster
-#' f <- system.file('extdata/Bdesert_spatRast.rda', package = 'npphen')
+#' f <- system.file("extdata/Bdesert_spatRast.rda", package = "npphen")
 #' Bdesert <- readRDS(f)
-#' #Dates
+#' # Dates
 #' data("modis_dates")
 #'
 #' # Define the number of cores to be use. In this example we use 1
 #' nc1 <- 1
 #'
-#' ExtremeAnoMap(s=Bdesert,dates=modis_dates,h=2,refp = c(1:423), 
-#' anop = c(723:768),rfd = 0.9,output = 'both',nCluster=nc1,outname="anomRFD_BD.tif",
-#' datatype="INT2S", rge=c(0,10000))
-#' #map_an1 <- stack("anomRFD_BD.tif")#run only for load anomaly brick
-#' #plot(map_an1)
-#' 
-#'}
+#' ExtremeAnoMap(
+#'   s = Bdesert, dates = modis_dates, h = 2, refp = c(1:423),
+#'   anop = c(723:768), rfd = 0.9, output = "both", nCluster = nc1, outname = "anomRFD_BD.tif",
+#'   datatype = "INT2S", rge = c(0, 10000)
+#' )
+#' # map_an1 <- stack("anomRFD_BD.tif")#run only for load anomaly brick
+#' # plot(map_an1)
+#' }
 #' @export
 
 ExtremeAnoMap <-
-  function(s,dates,h,refp,anop,rge, output='both',rfd = 0.9,nCluster,outname,datatype) {
+  function(s, dates, h, refp, anop, rge, output = "both", rfd = 0.9, nCluster, outname, datatype) {
     ff <- function(x) {
-      
       if (length(rge) != 2) {
         stop("rge must be a vector of length 2")
       }
@@ -78,58 +80,58 @@ ExtremeAnoMap <-
         stop("Inconsistent anop or refp. Arguments refp and anop can't be grater than length(x)")
       }
       output.method <- match(output, c("both", "anomalies", "rfd", "clean"))
-      
+
       if (is.na(output.method)) {
         stop("Invalid output. Must be 'both', 'anomalies', 'rfd' or 'clean'")
       }
-      
+
       ref.min <- min(refp)
       ref.max <- max(refp)
       ano.min <- min(anop)
       ano.max <- max(anop)
       ano.len <- ano.max - ano.min + 1
       len2 <- 2 * ano.len
-      
+
       if (ref.min >= ref.max | ano.min > ano.max) {
         stop("for refp or anop, lower value > upper value")
       }
-      
+
       if (all(is.na(x)) & output == "both") {
         return(rep(NA, len2))
       }
       if (all(is.na(x)) & output %in% c("clean", "anomalies", "rfd")) {
         return(rep(NA, ano.len))
       }
-      
-      if ((all(x < rge[1], na.rm = T) & output == 'both') | (all(x > rge[2], na.rm = T) & output == 'both')) {
+
+      if ((all(x < rge[1], na.rm = T) & output == "both") | (all(x > rge[2], na.rm = T) & output == "both")) {
         return(rep(NA, len2))
       }
-      if ((all(x < rge[1], na.rm = T) & output %in% c("clean", "anomalies", "rfd")) | 
-          (all(x > rge[2], na.rm = T) & output %in% c("clean", "anomalies", "rfd"))) {
+      if ((all(x < rge[1], na.rm = T) & output %in% c("clean", "anomalies", "rfd")) |
+        (all(x > rge[2], na.rm = T) & output %in% c("clean", "anomalies", "rfd"))) {
         return(rep(NA, ano.len))
       }
-      
+
       DOY <- lubridate::yday(dates)
       DOY[which(DOY == 366)] <- 365
       D1 <- cbind(DOY[ref.min:ref.max], x[ref.min:ref.max])
       D2 <- cbind(DOY[ano.min:ano.max], x[ano.min:ano.max])
-      
+
       if (length(unique(D1[, 2])) < 10 | (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1))) {
-        if(output == "both"){
+        if (output == "both") {
           return(rep(NA, len2))
         }
-        if(output %in% c("clean", "anomalies", "rfd")){
+        if (output %in% c("clean", "anomalies", "rfd")) {
           return(rep(NA, ano.len))
         }
       }
-      
+
       if (all(is.na(D2[, 2])) & output == "both") {
         return(rep(NA, len2))
       }
       if (all(is.na(D2[, 2])) & output %in% c("clean", "anomalies", "rfd")) {
         return(rep(NA, ano.len))
       }
-      
+
       if (h != 1 && h != 2) {
         stop("Invalid h")
       }
@@ -139,7 +141,7 @@ ExtremeAnoMap <-
           D1[i, 1] <- DOGS[which(DOGS[, 1] == D1[i, 1], arr.ind = TRUE), 2]
         }
       }
-      
+
       Hmat <- ks::Hpi(na.omit(D1))
       Hmat[1, 2] <- Hmat[2, 1]
       K1 <- ks::kde(na.omit(D1), H = Hmat, xmin = c(1, rge[1]), xmax = c(365, rge[2]), gridsize = c(365, 500))
@@ -160,7 +162,7 @@ ExtremeAnoMap <-
           MAXY[i] <- median(K1$eval.points[[2]][n])
         }
       }
-      
+
       h2d <- list()
       h2d$x <- seq(1, 365)
       h2d$y <- seq(rge[1], rge[2], len = 500)
@@ -170,20 +172,20 @@ ExtremeAnoMap <-
       names(cumRFDs) <- uniqueVals
       h2d$cumDensity <- matrix(nrow = nrow(h2d$density), ncol = ncol(h2d$density))
       h2d$cumDensity[] <- cumRFDs[as.character(h2d$density)]
-      
+
       if (h == 2) {
         for (i in 1:nrow(D2)) {
           D2[i, 1] <- DOGS[which(DOGS[, 1] == D2[i, 1], arr.ind = TRUE), 2]
         }
       }
-      
+
       Anoma <- rep(NA, ano.len)
       for (i in 1:nrow(D2)) {
         Anoma[i] <- D2[i, 2] - MAXY[D2[i, 1]]
       }
       Anoma <- Anoma[1:ano.len]
       names(Anoma) <- paste("anom", dates[ano.min:ano.max], sep = "_")
-      
+
       rowAnom <- matrix(NA, nrow = nrow(D2), ncol = 500)
       for (i in 1:nrow(D2)) {
         rowAnom[i, ] <- abs(h2d$y - D2[i, 2])
@@ -201,7 +203,7 @@ ExtremeAnoMap <-
       }
       AnomRFDPerc <- round(100 * (AnomRFD))
       names(AnomRFDPerc) <- paste("rfd", dates[ano.min:ano.max], sep = "_")
-      
+
       rfd <- rfd * 100
       if (output == "both") {
         out_data <- c(Anoma, AnomRFDPerc)
@@ -216,19 +218,18 @@ ExtremeAnoMap <-
         if (rfd == 0) {
           stop("For output = clean, rfd should be a value between 0 - 0.99")
         }
-        
+
         p <- which(AnomRFDPerc >= rfd | is.na(AnomRFDPerc))
         aa <- rep(NA, ano.len)
         for (i in p) {
           aa[i] <- Anoma[i]
         }
         names(aa) <- dates[ano.min:ano.max]
-        
+
         out_data <- aa
       }
-      
+
       out_data
-      
     }
     app(s, fun = ff, filename = outname, cores = nCluster, overwrite = T, wopt = list(datatype = datatype))
   }

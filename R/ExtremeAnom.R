@@ -139,11 +139,11 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
     return(rep(NA, ano.len))
   }
 
-  if ((all(x < rge[1], na.rm = T) & output == 'both') | (all(x > rge[2], na.rm = T) & output == 'both')) {
-      return(rep(NA, len2))
+  if ((all(x < rge[1], na.rm = T) & output == "both") | (all(x > rge[2], na.rm = T) & output == "both")) {
+    return(rep(NA, len2))
   }
-  if ((all(x < rge[1], na.rm = T) & output %in% c("clean", "anomalies", "rfd")) | 
-      (all(x > rge[2], na.rm = T) & output %in% c("clean", "anomalies", "rfd"))) {
+  if ((all(x < rge[1], na.rm = T) & output %in% c("clean", "anomalies", "rfd")) |
+    (all(x > rge[2], na.rm = T) & output %in% c("clean", "anomalies", "rfd"))) {
     return(rep(NA, ano.len))
   }
 
@@ -153,10 +153,10 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
   D2 <- cbind(DOY[ano.min:ano.max], x[ano.min:ano.max])
 
   if (length(unique(D1[, 2])) < 10 | (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1))) {
-    if(output == "both"){
-    return(rep(NA, len2))
+    if (output == "both") {
+      return(rep(NA, len2))
     }
-    if(output %in% c("clean", "anomalies", "rfd")){
+    if (output %in% c("clean", "anomalies", "rfd")) {
       return(rep(NA, ano.len))
     }
   }

@@ -170,7 +170,7 @@ Phen <-
     if (h == 2) {
       id.label <- "DGS"
     }
-    if(isTRUE(plot)) {
+    if (isTRUE(plot)) {
       plot(select_DGS, Ref, xlab = id.label, ylab = "VI", font.lab = 2, type = "l")
       axis(1, at = seq(0, 365, 50))
     }

@@ -14,54 +14,57 @@
 #' @seealso \code{\link{Phen}}
 #' @examples
 #' \dontrun{
-#' ##DEPENDING ON HARDWARE, THIS PROCESS CAN BE HIGHLY TIME CONSUMING##
+#' ## DEPENDING ON HARDWARE, THIS PROCESS CAN BE HIGHLY TIME CONSUMING##
 #'
 #' ## Testing raster data from Central Chile (NDVI), h=2##
 #'
 #' # Load data
-#' #SpatRaster
+#' # SpatRaster
 #' library(terra)
-#' f <- system.file('extdata/MegaDrought_spatRast.rda', package = 'npphen')
+#' f <- system.file("extdata/MegaDrought_spatRast.rda", package = "npphen")
 #' MegaDrought <- readRDS(f)
-#' #Dates
+#' # Dates
 #' data("modis_dates")
 #'
 #' # Making the LSP raster, n bands = 23
 #'
 #' # Define the number of cores to be use. In this example we use 1
-#' nc1<-1
+#' nc1 <- 1
 #'
-#'PhenMap(s = MegaDrought,dates = modis_dates,h = 2,
-#'frequency = '16-days',nCluster = nc1,outname = 'phen_MD.tif', 
-#'datatype = 'INT2S',rge = c(0,10000))
-#' #map1 <- rast("phen_MD.tif")#run only for load phenology brick
-#' #plot(map1)
+#' PhenMap(
+#'   s = MegaDrought, dates = modis_dates, h = 2,
+#'   frequency = "16-days", nCluster = nc1, outname = "phen_MD.tif",
+#'   datatype = "INT2S", rge = c(0, 10000)
+#' )
+#' # map1 <- rast("phen_MD.tif")#run only for load phenology brick
+#' # plot(map1)
 #'
 #' ## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI), h=2 ##
 #'
 #' # Load data
 #' SpatRaster
-#' f <- system.file('extdata/Bdesert_spatRast.rda', package = 'npphen')
+#' f <- system.file("extdata/Bdesert_spatRast.rda", package = "npphen")
 #' Bdesert <- readRDS(f)
-#' #Dates
+#' # Dates
 #' data("modis_dates")
 #'
 #' # Making the LSP raster, n bands = 23
 #' # Define the number of cores to be use. In this example we use 1
-#' nc1<-1
+#' nc1 <- 1
 #'
-#'PhenMap(s= Bdesert,dates=modis_dates,h=2,
-#'frequency='16-days', nCluster=1,outname="phen_BD.tif", 
-#'datatype="INT2S",rge=c(0,10000))
-#' #map2 <- rast("phen_BD.tif") #run only for load phenology brick
-#' #plot(map2)
+#' PhenMap(
+#'   s = Bdesert, dates = modis_dates, h = 2,
+#'   frequency = "16-days", nCluster = 1, outname = "phen_BD.tif",
+#'   datatype = "INT2S", rge = c(0, 10000)
+#' )
+#' # map2 <- rast("phen_BD.tif") #run only for load phenology brick
+#' # plot(map2)
 #' }
 #' @export
 
 PhenMap <-
-  function(s,dates,h,frequency='16-days',nCluster,outname,datatype,rge) {
+  function(s, dates, h, frequency = "16-days", nCluster, outname, datatype, rge) {
     ff <- function(x) {
-      
       if (length(rge) != 2) {
         stop("rge must be a vector of length 2")
       }
@@ -71,7 +74,7 @@ PhenMap <-
       if (length(dates) != length(x)) {
         stop("N of dates and files do not match")
       }
-      
+
       freq.method <- match(frequency, c(
         "daily", "8-days", "16-days",
         "bi-weekly", "monthly"
@@ -100,14 +103,14 @@ PhenMap <-
       if (all(x < rge[1]) | all(x > rge[2], na.rm = T)) {
         return(rep(NA, nGS))
       }
-      
+
       DOY <- yday(dates)
       DOY[which(DOY == 366)] <- 365
       D1 <- cbind(DOY, x)
       if (length(unique(D1[, 2])) < 10 | (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1))) {
         return(rep(NA, nGS))
       }
-      
+
       if (h != 1 && h != 2) {
         stop("Invalid h")
       }
@@ -117,17 +120,17 @@ PhenMap <-
           D1[i, 1] <- DOGS[which(DOGS[, 1] == D1[i, 1], arr.ind = TRUE), 2]
         }
       }
-      
+
       Hmat <- Hpi(na.omit(D1))
       Hmat[1, 2] <- Hmat[2, 1]
       K1 <- kde(na.omit(D1), H = Hmat, xmin = c(1, rge[1]), xmax = c(365, rge[2]), gridsize = c(365, 500))
       K1Con <- K1$estimate
-      
+
       for (j in 1:365) {
         Kdiv <- sum(K1$estimate[j, ])
         ifelse(Kdiv == 0, K1Con[j, ] <- 0, K1Con[j, ] <- K1$estimate[j, ] / sum(K1$estimate[j, ]))
       }
-      
+
       MAXY <- apply(K1Con, 1, max)
       for (i in 1:365) {
         n.select <- which(K1Con[i, ] == MAXY[i], arr.ind = TRUE)
@@ -140,7 +143,7 @@ PhenMap <-
           MAXY[i] <- median(K1$eval.points[[2]][n])
         }
       }
-      
+
       if (frequency == "daily") {
         select_DGS <- seq(1, 365, 1)
         Ref <- MAXY
@@ -161,9 +164,9 @@ PhenMap <-
         select_DGS <- c(1, 15, 32, 46, 60, 74, 91, 105, 121, 135, 152, 166, 182, 196, 213, 227, 244, 258, 274, 288, 305, 319, 335, 349)
         Ref <- MAXY[select_DGS]
       }
-     
+
       names(Ref) <- select_DGS
       Ref
     }
     app(s, fun = ff, filename = outname, cores = nCluster, overwrite = T, wopt = list(datatype = datatype))
-}
+  }
