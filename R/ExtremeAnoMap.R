@@ -65,125 +65,167 @@ ExtremeAnoMap <-
   function(s,dates,h,refp,anop,rge, output='both',rfd = 0.9,nCluster,outname,datatype) {
     ff <- function(x) {
       
-      if(length(rge)!=2){stop("rge must be a vector of length 2")}
-      if(rge[1]>rge[2]){stop("rge vector order must be minimum/maximum")}
-      if(length(dates)!=length(x)){stop("N of dates and files do not match")}
+      if (length(rge) != 2) {
+        stop("rge must be a vector of length 2")
+      }
+      if (rge[1] > rge[2]) {
+        stop("rge vector order must be minimum/maximum")
+      }
+      if (length(dates) != length(x)) {
+        stop("N of dates and files do not match")
+      }
+      if (length(x) < length(refp) | length(x) < length(anop)) {
+        stop("Inconsistent anop or refp. Arguments refp and anop can't be grater than length(x)")
+      }
+      output.method <- match(output, c("both", "anomalies", "rfd", "clean"))
       
-      output.method <- match(output, c("both", "anomalies", "rfd","clean"))
-      
-      if (is.na(output.method)){ 
-        stop("Invalid output. Must be 'both', 'anomalies', 'rfd' or 'clean'")}
+      if (is.na(output.method)) {
+        stop("Invalid output. Must be 'both', 'anomalies', 'rfd' or 'clean'")
+      }
       
       ref.min <- min(refp)
       ref.max <- max(refp)
       ano.min <- min(anop)
       ano.max <- max(anop)
-      ano.len <- ano.max-ano.min+1
-      len2 <- 2*ano.len
+      ano.len <- ano.max - ano.min + 1
+      len2 <- 2 * ano.len
       
-      if(ref.min>=ref.max | ano.min>ano.max){stop("for refp or anop, lower value > upper value")}
-      
-      if (all(is.na(x)) & output == 'both') {
-        return(rep(NA,len2))
+      if (ref.min >= ref.max | ano.min > ano.max) {
+        stop("for refp or anop, lower value > upper value")
       }
-      if (all(is.na(x)) & output %in% c('clean','anomalies','rfd')) {
-        return(rep(NA,ano.len))
+      
+      if (all(is.na(x)) & output == "both") {
+        return(rep(NA, len2))
+      }
+      if (all(is.na(x)) & output %in% c("clean", "anomalies", "rfd")) {
+        return(rep(NA, ano.len))
+      }
+      
+      if ((all(x < rge[1], na.rm = T) & output == 'both') | (all(x > rge[2], na.rm = T) & output == 'both')) {
+        return(rep(NA, len2))
+      }
+      if ((all(x < rge[1], na.rm = T) & output %in% c("clean", "anomalies", "rfd")) | 
+          (all(x > rge[2], na.rm = T) & output %in% c("clean", "anomalies", "rfd"))) {
+        return(rep(NA, ano.len))
       }
       
       DOY <- lubridate::yday(dates)
-      DOY[which(DOY==366)]<-365
-      D1<-cbind(DOY[ref.min:ref.max],x[ref.min:ref.max])
-      D2<-cbind(DOY[ano.min:ano.max],x[ano.min:ano.max])
+      DOY[which(DOY == 366)] <- 365
+      D1 <- cbind(DOY[ref.min:ref.max], x[ref.min:ref.max])
+      D2 <- cbind(DOY[ano.min:ano.max], x[ano.min:ano.max])
       
-      if(length(unique(D1[,2]))<10 | (nrow(D1)-sum(is.na(D1)))<(0.1*nrow(D1)) & output == 'both') {
-        return(rep(NA,len2))
+      if (length(unique(D1[, 2])) < 10 | (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1))) {
+        if(output == "both"){
+          return(rep(NA, len2))
+        }
+        if(output %in% c("clean", "anomalies", "rfd")){
+          return(rep(NA, ano.len))
+        }
       }
       
-      if(length(unique(D1[,2]))<10 | (nrow(D1)-sum(is.na(D1)))<(0.1*nrow(D1)) %in% c('clean','anomalies','rfd')) {
-        return(rep(NA,ano.len))
+      if (all(is.na(D2[, 2])) & output == "both") {
+        return(rep(NA, len2))
+      }
+      if (all(is.na(D2[, 2])) & output %in% c("clean", "anomalies", "rfd")) {
+        return(rep(NA, ano.len))
       }
       
-      if (all(is.na(D2[,2])) & output == 'both') {
-        return(rep(NA,len2))
+      if (h != 1 && h != 2) {
+        stop("Invalid h")
       }
-      if (all(is.na(D2[,2])) & output %in% c('clean','anomalies','rfd')) {
-        return(rep(NA,ano.len))
+      DOGS <- cbind(seq(1, 365), c(seq(185, 365), seq(1, 184)))
+      if (h == 2) {
+        for (i in 1:nrow(D1)) {
+          D1[i, 1] <- DOGS[which(DOGS[, 1] == D1[i, 1], arr.ind = TRUE), 2]
+        }
       }
       
-      if(h!=1 && h!=2){stop("Invalid h")}
-      DOGS<-cbind(seq(1,365),c(seq(185,365),seq(1,184)))
-      if(h==2){
-        for(i in 1:nrow(D1)){
-          D1[i,1]<-DOGS[which(DOGS[,1]==D1[i,1],arr.ind=TRUE),2]}}
-      
-      Hmat<-ks::Hpi(na.omit(D1))
-      Hmat[1,2]<-Hmat[2,1]
-      K1<-ks::kde(na.omit(D1),H=Hmat,xmin=c(1,rge[1]),xmax=c(365,rge[2]),gridsize=c(365,500))
-      K1Con<-K1$estimate
-      for(j in 1:365){
-        Kdiv<-sum(K1$estimate[j,])
-        ifelse(Kdiv==0,K1Con[j,]<-0,K1Con[j,]<-K1$estimate[j,]/sum(K1$estimate[j,]))}
-      MAXY<-apply(K1Con,1,max)
-      for(i in 1:365){
-        n.select <- which(K1Con[i,]==MAXY[i],arr.ind=TRUE)
-        if(length(n.select) > 1){
+      Hmat <- ks::Hpi(na.omit(D1))
+      Hmat[1, 2] <- Hmat[2, 1]
+      K1 <- ks::kde(na.omit(D1), H = Hmat, xmin = c(1, rge[1]), xmax = c(365, rge[2]), gridsize = c(365, 500))
+      K1Con <- K1$estimate
+      for (j in 1:365) {
+        Kdiv <- sum(K1$estimate[j, ])
+        ifelse(Kdiv == 0, K1Con[j, ] <- 0, K1Con[j, ] <- K1$estimate[j, ] / sum(K1$estimate[j, ]))
+      }
+      MAXY <- apply(K1Con, 1, max)
+      for (i in 1:365) {
+        n.select <- which(K1Con[i, ] == MAXY[i], arr.ind = TRUE)
+        if (length(n.select) > 1) {
           n <- n.select[1]
-          MAXY[i]<-NA}
-        if(length(n.select) == 1){
+          MAXY[i] <- NA
+        }
+        if (length(n.select) == 1) {
           n <- n.select
-          MAXY[i]<-median(K1$eval.points[[2]][n])
+          MAXY[i] <- median(K1$eval.points[[2]][n])
         }
       }
       
       h2d <- list()
-      h2d$x <- seq(1,365)
-      h2d$y <- seq(rge[1],rge[2],len=500)
-      h2d$density <- K1Con/sum(K1Con)
+      h2d$x <- seq(1, 365)
+      h2d$y <- seq(rge[1], rge[2], len = 500)
+      h2d$density <- K1Con / sum(K1Con)
       uniqueVals <- rev(unique(sort(h2d$density)))
       cumRFDs <- cumsum(uniqueVals)
       names(cumRFDs) <- uniqueVals
       h2d$cumDensity <- matrix(nrow = nrow(h2d$density), ncol = ncol(h2d$density))
       h2d$cumDensity[] <- cumRFDs[as.character(h2d$density)]
       
-      if(h==2){
-        for(i in 1:nrow(D2)){
-          D2[i,1]<-DOGS[which(DOGS[,1]==D2[i,1],arr.ind=TRUE),2]}} 
+      if (h == 2) {
+        for (i in 1:nrow(D2)) {
+          D2[i, 1] <- DOGS[which(DOGS[, 1] == D2[i, 1], arr.ind = TRUE), 2]
+        }
+      }
       
-      Anoma <- rep(NA,ano.len)
-      for(i in 1:nrow(D2)){
-        Anoma[i]<-as.integer(D2[i,2]-MAXY[D2[i,1]])}
+      Anoma <- rep(NA, ano.len)
+      for (i in 1:nrow(D2)) {
+        Anoma[i] <- D2[i, 2] - MAXY[D2[i, 1]]
+      }
       Anoma <- Anoma[1:ano.len]
-      names(Anoma) <- paste('anom',dates[ano.min:ano.max],sep = '_')
+      names(Anoma) <- paste("anom", dates[ano.min:ano.max], sep = "_")
       
-      rowAnom<-matrix(NA,nrow=nrow(D2),ncol=500)
-      for(i in 1:nrow(D2)){
-        rowAnom[i,]<-abs(h2d$y-D2[i,2])}
-      rowAnom2<-unlist(apply(rowAnom,1,function(x) {if(all(is.na(x))) {NA} else {which.min(x)}}))
-      AnomRFD<-rep(NA,nrow(D2))
-      for( i in 1:nrow(D2)){
-        AnomRFD[i]<-h2d$cumDensity[D2[i,1],rowAnom2[i]]}
-      AnomRFDPerc <- round(100*(AnomRFD))
-      names(AnomRFDPerc)<- paste('rfd',dates[ano.min:ano.max],sep = '_')
+      rowAnom <- matrix(NA, nrow = nrow(D2), ncol = 500)
+      for (i in 1:nrow(D2)) {
+        rowAnom[i, ] <- abs(h2d$y - D2[i, 2])
+      }
+      rowAnom2 <- unlist(apply(rowAnom, 1, function(x) {
+        if (all(is.na(x))) {
+          NA
+        } else {
+          which.min(x)
+        }
+      }))
+      AnomRFD <- rep(NA, nrow(D2))
+      for (i in 1:nrow(D2)) {
+        AnomRFD[i] <- h2d$cumDensity[D2[i, 1], rowAnom2[i]]
+      }
+      AnomRFDPerc <- round(100 * (AnomRFD))
+      names(AnomRFDPerc) <- paste("rfd", dates[ano.min:ano.max], sep = "_")
       
-      rfd <- rfd*100
-      if(output == 'both'){
-        out_data <- c(Anoma,AnomRFDPerc)}
-      if(output == 'anomalies'){
-        out_data <- Anoma}
-      if(output == 'rfd'){
-        out_data <- AnomRFDPerc}
-      if(output == 'clean'){
-        if (rfd == 0 ){ 
-          stop("For output = clean, rfd should be a value between 0 - 0.99")}
+      rfd <- rfd * 100
+      if (output == "both") {
+        out_data <- c(Anoma, AnomRFDPerc)
+      }
+      if (output == "anomalies") {
+        out_data <- Anoma
+      }
+      if (output == "rfd") {
+        out_data <- AnomRFDPerc
+      }
+      if (output == "clean") {
+        if (rfd == 0) {
+          stop("For output = clean, rfd should be a value between 0 - 0.99")
+        }
         
         p <- which(AnomRFDPerc >= rfd | is.na(AnomRFDPerc))
         aa <- rep(NA, ano.len)
         for (i in p) {
           aa[i] <- Anoma[i]
         }
-        names(aa)<- dates[ano.min:ano.max]
+        names(aa) <- dates[ano.min:ano.max]
         
-        out_data <- aa}
+        out_data <- aa
+      }
       
       out_data
       
