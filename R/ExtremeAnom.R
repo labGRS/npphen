@@ -113,9 +113,6 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
     stop("N of dates and files do not match")
   }
   if (length(x) < length(refp) | length(x) < length(anop)) {
-    stop("Invalid output. Must be 'both', 'anomalies', 'rfd' or 'clean'")
-  }
-  if (length(x) < length(refp) | length(x) < length(anop)) {
     stop("Inconsistent anop or refp. Arguments refp and anop can't be grater than length(x)")
   }
   output.method <- match(output, c("both", "anomalies", "rfd", "clean"))
@@ -142,13 +139,12 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
     return(rep(NA, ano.len))
   }
 
-  if (all(x < rge[1]) | all(x > rge[2], na.rm = T)) {
-    if (output == "both") {
+  if ((all(x < rge[1], na.rm = T) & output == 'both') | (all(x > rge[2], na.rm = T) & output == 'both')) {
       return(rep(NA, len2))
-    }
-    if (output %in% c("clean", "anomalies", "rfd")) {
-      return(rep(NA, ano.len))
-    }
+  }
+  if ((all(x < rge[1], na.rm = T) & output %in% c("clean", "anomalies", "rfd")) | 
+      (all(x > rge[2], na.rm = T) & output %in% c("clean", "anomalies", "rfd"))) {
+    return(rep(NA, ano.len))
   }
 
   DOY <- lubridate::yday(dates)
