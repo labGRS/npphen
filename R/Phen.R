@@ -1,18 +1,18 @@
 #' @title Phen
 #' @description Estimates the annual phenological cycle from a time series of vegetation greenness.
 #' @encoding UTF-8
-#' @param x Numeric vector. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input values if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000
+#' @param x Numeric vector. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input values if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000)
 #' @param dates A date vector. The number of dates must be equal to the number of "x" values (numeric input vector).
-#' @param h Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h=1 if the vegetation is in the Northern Hemisphere (season starting at January 1st), h=2 if it is in the Southern Hemisphere (season starting at July 1st)
-#' @param frequency Character string. Defines the number of samples for the output phenology and must be one of the this: 'daily' giving output vector of length 365, '8-days' giving output vector of length 46 (i.e MOD13Q1 and MYD13Q1), 'monthly' giving output vector of length 12,'bi-weekly' giving output vector of length 24 (i.e. GIMMS) or '16-days' (default) giving output vector of length 23 (i.e MOD13Q1 or MYD13Q1).
-#' @param rge Numeric vector with two values setting the minimum and maximum values of the response variable (e.g. NDVI) used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge = c(0,10000)
-#' @param plot Logical. Set TRUE (default) or FALSE to show the phenology curve plot.
-#' @details Derives the annual phenological cycle for a standard growing season using a numeric vector of vegetation canopy greenness values (e.g. Leaf Area Index, LAI) or satellite based greenness proxies such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). A vector with dates for the greenness values is also required.
+#' @param h Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h=1 if the vegetation is in the Northern Hemisphere (season starting on January 1st), h=2 if it is in the Southern Hemisphere (season starting on July 1st)
+#' @param frequency Character string. Defines the time-steps for the output phenology and must be one of the this: 'daily' with an output vector of length 365, '8-days' with an output vector of length 46 (e.g. MOD13Q1 and MYD13Q1 combined), 'monthly' with an output vector of length 12,'bi-weekly' with an output vector of length 24 (i.e. GIMMS) or '16-days' (default) with an output vector of length 23 (i.e MOD13Q1 or MYD13Q1)
+#' @param rge Numeric vector with the minimum and maximum values of the vegetation index (e.g. NDVI) used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge = c(0,10000)
+#' @param plot Logical. Set TRUE (default) to display the annual phenology curve, set FALSE otherwise.
+#' @details Derives the most recurrent annual phenological cycle for a reference period using a numeric vector of vegetation canopy greenness values (e.g. Leaf Area Index, LAI) or satellite based greenness proxies such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). A vector with dates for the greenness values is also required.
 #' @return A numeric vector, where each value represents the expected greeness at that date
 #' @seealso \code{\link{PhenMap}},\code{\link{PhenKplot}}
 #' @examples
 #' \dontshow{
-#' ## Testing function with time series of Nothofagus macrocarpa (NDVI)
+#' ## Testing the function with an NDVI time series of a deciduous Nothofagus macrocarpa forest
 #' # Load data
 #' data("phents")
 #' # Phenology for the given data
@@ -28,29 +28,27 @@
 #' # Dates
 #' data("modis_dates")
 #'
-#' # Generate a Raster time series using a raster stack and a date database from Central Chile
-#' # Obtain data from a particular pixel generating a time series
+#' # Generate a Raster time series from a particular pixel using a SpatRaster and a date from Central Chile
 #' md_pixel <- cellFromXY(MegaDrought, cbind(313395, 6356610))
 #' md_pixelts <- as.numeric(MegaDrought[md_pixel])
 #' plot(modis_dates, md_pixelts, type = "l")
 #'
-#' # Phenology for the given pixel
+#' # Recurrent annual phenology for the given pixel
 #' Phen(x = md_pixelts, dates = modis_dates, h = 2, frequency = "16-days", rge = c(0, 10000))
 #'
-#' ## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI), h=2 ##
+#' ## Testing with the Bdesert_spatRast from the Atacama Desert, Northern Chile (NDVI), h=2 ##
 #'
 #' # Load data
 #' # SparRaster
 #' f <- system.file("extdata/Bdesert_spatRast.rda", package = "npphen")
 #' Bdesert <- readRDS(f)
 #'
-#' # Generate a Raster time series using a raster stack and a date database from Northern Chile
-#' # Obtain data from a particular pixel generating a time series
+#' # Generate a Raster time series from a particular pixel using a SpatRaster and a date from Northern Chile
 #' bd_pixel <- cellFromXY(Bdesert, cbind(286638, 6852107))
 #' bd_pixelts <- as.numeric(Bdesert[bd_pixel])
 #' plot(modis_dates, bd_pixelts, type = "l")
 #'
-#' # Phenology for the given pixel
+#' # Recurrent annual phenology for the given pixel
 #' Phen(x = bd_pixelts, dates = modis_dates, h = 2, frequency = "16-days", rge = c(0, 10000))
 #' }
 #' @import ks
