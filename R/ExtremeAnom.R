@@ -1,5 +1,5 @@
 #' @title ExtremeAnom
-#' @description Based on the annual reference frequency distribution of a vegetation index time series (e.g. a numeric vector of NDVI), calculates anomalies and how extreme these anomalies are (rfd position ranging from 0 to 100)
+#' @description Based on the annual reference frequency distribution (rfd) of a vegetation index time series (e.g. a numeric vector of NDVI), calculates anomalies and how extreme these anomalies are (rfd position ranging from 0 to 100)
 #' @encoding UTF-8
 #' @param x Numeric vector. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input values if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000
 #' @param dates A date vector. The number of dates must be equal to the number of "x" values (numeric input vector).
