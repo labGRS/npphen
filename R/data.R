@@ -1,23 +1,3 @@
-#' Mega drought in Central Chile
-#'
-#' MODIS NDVI RasterStack of Central Chile combining MOD13Q1 & MYD13Q1 between 2000.02.18 and 2021.06.26, 
-#' cleaned using the detailed QA band. Megadrought affected Central Chile between 2010 and 2015 and again in 2019-2022
-#'
-#' @format RasterStack EPSG:32719
-#' @source \url{https://lpdaac.usgs.gov/}
-#' 
-"MegaDrought_stack"
-
-#' Blooming Desert Northern Chile
-#'
-#' MODIS NDVI RasterStack of the Atacama Desert, Northern Chile, combining MOD13Q1 & MYD13Q1 between 2000.02.18 and 2021.06.26,
-#' cleaned using the detailed QA band. Blooming deserts are rare greening events to be seen as positive NDVI anomalies in Atacama
-#'
-#' @format RasterStack EPSG:32719
-#' @source \url{https://lpdaac.usgs.gov/}
-#' 
-"Bdesert_stack"
-
 #' A vector with dates for both RasterStack datasets: Mega drought and Blooming Desert, with 929 dates
 #'
 #' @format Vector of dates

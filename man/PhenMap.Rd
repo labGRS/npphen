@@ -5,79 +5,81 @@
 \alias{PhenMap}
 \title{PhenMap}
 \usage{
-PhenMap(s, dates, h, frequency = "16-days", nCluster, outname, format,
-  datatype, rge)
+PhenMap(s, dates, h, frequency = "16-days", nCluster, outname, datatype, rge)
 }
 \arguments{
-\item{s}{Raster stack of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input raster stack if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000}
+\item{s}{SpatRaster of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input SpatRaster if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000)}
 
-\item{dates}{A date vector. The number of dates must be equal to the number of "x" values (numeric input vector).}
+\item{dates}{A date vector. The number of dates must be equal to the number of layers of the vegetation index SpatRaster.}
 
-\item{h}{Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h=1 if the vegetation is in the Northern Hemisphere (season starting at January 1st), h=2 if it is in the Southern Hemisphere (season starting at July 1st)}
+\item{h}{Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h = 1 if the vegetation is in the Northern Hemisphere (season starting on January 1st), h = 2 if it is in the Southern Hemisphere (season starting on July 1st)}
 
-\item{frequency}{Character string. Defines the number of samples for the output phenology and must be one of the this: 'daily' giving output vector of length 365, '8-days' giving output vector of length 46 (i.e MOD13Q1 and MYD13Q1), 'monthly' giving output vector of length 12,'bi-weekly' giving output vector of length 24 (i.e. GIMMS) or '16-days' (default) giving output vector of length 23 (i.e MOD13Q1 or MYD13Q1).}
+\item{frequency}{Character string. Defines the number of samples for the output phenology and must be one of the following options: 'daily' with an output vector of length 365, '8-days' with an output vector of length 46 (e.g. MOD13Q1 and MYD13Q1 combined), 'monthly' with an output vector of length 12,'bi-weekly' with an output vector of length 24 (i.e. GIMMS) or '16-days' (default) with an output vector of length 23 (i.e MOD13Q1 or MYD13Q1)}
 
 \item{nCluster}{Numeric. Number of CPU cores to be used for computational calculations}
 
-\item{outname}{Character vector with the output path and filename with extension or only the filename and extension if work directory was set. For example outname = "output_phen.tif". See \code{\link{writeRaster}}}
+\item{outname}{Character vector with the output directory path and filename with extension or only the filename and extension if working directory was set. For example outname = "output_phen.tif". See \code{\link[terra]{writeRaster}}}
 
-\item{format}{Character. Output file type. See \code{\link{writeFormats}}}
+\item{datatype}{Character. Output data type. For example datatype = "INT2S" for signed integer values. See \code{\link[terra]{writeRaster}}}
 
-\item{datatype}{Character. Output data type. See \code{\link{dataType}}}
-
-\item{rge}{A vector containing minimum and maximum values of the response variable used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge =c(0,10000)}
+\item{rge}{A vector containing minimum and maximum values of the vegetation index used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge = c(0,10000)}
 }
 \value{
-RasterStack
+SpatRaster
 }
 \description{
 Estimates annual Land Surface Phenology (LSP) using time series of a vegetation greenness raster stack.
 }
 \details{
-Derives the annual Land Surface Phenological (LSP) cycle for a standard growing season using a raster stack of satellite based greenness values such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). The LSP cycle is calculated for all pixels of the input raster stack in the same way as for the \code{\link{Phen}} function. The output is a multiband raster where every band is the expected greenness value at a given time step of the standard growing season. For example, for MODIS Vegetation Index 16-days composites the number of time steps of the growing season is 23 (frequency = "16-days"), and therefore, the output raster will have 23 bands. A vector with dates for the greenness values is also required.
+Per pixel, it derives the most recurrent annual Land Surface Phenology (LSP) for a reference period  using time series of satellite based greenness values such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). The annual LSP is calculated for all pixels of the input SpatRaster in the same way as for the \code{\link{Phen}} function. The output is a multiband raster where every band is the expected greenness value at a given time step of the growing season. For example, for MODIS Vegetation Index 16-days composites the number of time steps of the growing season is 23 (frequency = "16-days"), and therefore, the output raster will have 23 bands. A vector with dates for the greenness values is also required
 }
 \examples{
 \dontrun{
-##DEPENDING ON HARDWARE, THIS PROCESS CAN BE HIGHLY TIME CONSUMING##
+## DEPENDING ON HARDWARE, THIS PROCESS CAN BE HIGHLY TIME CONSUMING##
 
-## Testing raster data from Central Chile (NDVI), h=2##
-
-# Load data
-#RasterStack
-data("MegaDrought_stack")
-#Dates
-data("modis_dates")
-
-# Making the LSP raster, n bands = 23
-
-library(snow)
-
-# Define the number of cores to be use. In this example we use 1
-nc1<-1
-
-PhenMap(s = MegaDrought_stack,dates = modis_dates,h = 2,
-frequency = '16-days',nCluster = nc1,outname = 'phen_MD.tif',
-format = 'GTiff',datatype = 'INT2S',rge = c(0,10000))
-#map1 <- stack("phen_MD.tif")#run only for load phenology brick
-#plot(map1)
-
-## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI), h=2 ##
+## Testing with an NDVI spatRast from Central Chile, h = 2##
 
 # Load data
-RasterStack
-data("Bdesert_stack")
-#Dates
+# SpatRaster
+library(terra)
+f <- system.file("extdata/MegaDrought_spatRast.rda", package = "npphen")
+MegaDrought <- readRDS(f)
+# Dates
 data("modis_dates")
 
-# Making the LSP raster, n bands = 23
-# Define the number of cores to be use. In this example we use 1
-nc1<-1
+# Making the LSP output raster, n bands = 23
 
-PhenMap(s= Bdesert_stack,dates=modis_dates,h=2,
-frequency='16-days', nCluster=nc1,outname="phen_BD.tif", 
-format="GTiff", datatype="INT2S",rge=c(0,10000))
-#map2 <- stack("phen_BD.tif") #run only for load phenology brick
-#plot(map2)
+# Define the number of cores to be use. In this example we use 1
+nc1 <- 1
+
+PhenMap(
+  s = MegaDrought, dates = modis_dates, h = 2,
+  frequency = "16-days", nCluster = nc1, outname = "phen_MD.tif",
+  datatype = "INT2S", rge = c(0, 10000)
+)
+# map1 <- rast("phen_MD.tif")#run only for load phenology brick
+# plot(map1)
+
+## Testing with an NDVI spatRast from the Atacama Desert, Northern Chile, h=2 ##
+
+# Load data
+SpatRaster
+f <- system.file("extdata/Bdesert_spatRast.rda", package = "npphen")
+Bdesert <- readRDS(f)
+# Dates
+data("modis_dates")
+
+# Making the LSP output raster, n bands = 23
+# Define the number of cores to be use. In this example we use 1
+nc1 <- 1
+
+PhenMap(
+  s = Bdesert, dates = modis_dates, h = 2,
+  frequency = "16-days", nCluster = 1, outname = "phen_BD.tif",
+  datatype = "INT2S", rge = c(0, 10000)
+)
+# map2 <- rast("phen_BD.tif") #run only for loading the multiband LSP spatRaster
+# plot(map2)
 }
 }
 \seealso{
