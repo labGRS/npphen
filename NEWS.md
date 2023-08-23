@@ -3,6 +3,7 @@ npphen 2.0.0
 
 * Remove raster & rgdal dependencies
 * Migrate to terra for raster data processing
+* Fix minor bugs
 
 npphen 1.5.2 
 ===========
