@@ -1,8 +1,8 @@
 #' @title PhenMap
 #' @description Estimates annual Land Surface Phenology (LSP) using time series of a vegetation greenness raster stack.
 #' @encoding UTF-8
-#' @param s SpatRaster of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input raster stack if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000)
-#' @param dates A date vector. The number of dates must be equal to the number of layers of the vegetation index SpatRaster
+#' @param s SpatRaster of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input SpatRaster if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000)
+#' @param dates A date vector. The number of dates must be equal to the number of layers of the vegetation index SpatRaster.
 #' @param h Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h = 1 if the vegetation is in the Northern Hemisphere (season starting on January 1st), h = 2 if it is in the Southern Hemisphere (season starting on July 1st)
 #' @param frequency Character string. Defines the number of samples for the output phenology and must be one of the following options: 'daily' with an output vector of length 365, '8-days' with an output vector of length 46 (e.g. MOD13Q1 and MYD13Q1 combined), 'monthly' with an output vector of length 12,'bi-weekly' with an output vector of length 24 (i.e. GIMMS) or '16-days' (default) with an output vector of length 23 (i.e MOD13Q1 or MYD13Q1)
 #' @param nCluster Numeric. Number of CPU cores to be used for computational calculations
