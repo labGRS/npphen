@@ -17,5 +17,4 @@
 #' @seealso
 #' \code{\link{Phen}}, \code{\link{PhenMap}}, \code{\link{ExtremeAnom}}, \code{\link{ExtremeAnoMap}}, \code{\link{PhenKplot}}
 #'
-NULL
 '_PACKAGE'
