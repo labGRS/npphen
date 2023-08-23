@@ -14,7 +14,7 @@ The R package npphen has been developed primarily to enable land surface phenolo
 * Long term phenological reconstruction for satellite time series, with no need of gap filling or any other adjustment.
   * Simple phenology
   * Phenology and confidence intervals
-* Custom anomly calculation using the long term phenology as baseline
+* Custom anomaly calculation using the long term phenology as baseline
 * Raster functions for raster time series
   
 
@@ -37,8 +37,17 @@ library(npphen)
 
 ```
 
-For a brief introduction and examples, check out the [tutorial](https://www.pucv.cl/uuaa/labgrs/proyectos/introduction-to-npphen-in-r).
+For a brief introduction and examples, check out the [tutorial](https://www.pucv.cl/uuaa/labgrs/proyectos/introduction-to-npphen-in-r). See changelogs on [NEWS.md](https://github.com/labGRS/npphen/blob/master/NEWS.md)
+  
 
 ## License
 
 The **npphen** package as a whole is licensed under the GPLv3. See the [LICENSE](LICENSE) file for more details.
+
+## References
+
+See the recently published paper for applications and examples use of **npphen**: 
+
+* Chávez, R.O.; Estay, S.A.; Lastra, J.A.; Riquelme, C.G.; Olea, M.; Aguayo, J.; Decuyper, M. npphen: An R-Package for Detecting and Mapping Extreme Vegetation Anomalies Based on Remotely Sensed Phenological Variability. Remote Sens. 2023, 15, 73. https://doi.org/10.3390/rs15010073 
+
+
