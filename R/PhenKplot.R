@@ -37,7 +37,8 @@
 #' plot(modis_dates, md_pixelts, type = "l")
 #'
 #' # Variability of the annual phenology for the given pixel
-#' PhenKplot(x = md_pixelts, dates = modis_dates, h = 2, xlab = "DGS", ylab = "NDVI", rge = c(0, 10000))
+#' PhenKplot(x = md_pixelts, dates = modis_dates,
+#' h = 2, xlab = "DGS", ylab = "NDVI", rge = c(0, 10000))
 #'
 #'
 #' ## Testing with the Bdesert_spatRast from the Atacama Desert, Northern Chile (NDVI), h=2 ##
@@ -53,7 +54,8 @@
 #' plot(modis_dates, bd_pixelts, type = "l")
 #'
 #' # Variability of the annual phenology for the given pixel
-#' PhenKplot(x = bd_pixelts, dates = modis_dates, h = 2, xlab = "DGS", ylab = "NDVI", rge = c(0, 10000))
+#' PhenKplot(x = bd_pixelts, dates = modis_dates, 
+#' h = 2, xlab = "DGS", ylab = "NDVI", rge = c(0, 10000))
 #' }
 #' @export
 
