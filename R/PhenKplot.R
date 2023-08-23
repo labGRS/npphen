@@ -31,7 +31,8 @@
 #' # Dates
 #' data("modis_dates")
 #'
-#' # Generate a Raster time series from a particular pixel using a SpatRaster and a date for Central Chile
+#' # Generate a Raster time series from a particular pixel 
+#' # using a SpatRaster and a date for Central Chile
 #' md_pixel <- cellFromXY(MegaDrought, cbind(313395, 6356610))
 #' md_pixelts <- as.numeric(MegaDrought[md_pixel])
 #' plot(modis_dates, md_pixelts, type = "l")
@@ -41,14 +42,16 @@
 #' h = 2, xlab = "DGS", ylab = "NDVI", rge = c(0, 10000))
 #'
 #'
-#' ## Testing with the Bdesert_spatRast from the Atacama Desert, Northern Chile (NDVI), h=2 ##
+#' ## Testing with the Bdesert_spatRast from 
+#' ## the Atacama Desert, Northern Chile (NDVI), h=2 ##
 #'
 #' # Load data
 #' # SparRaster
 #' f <- system.file("extdata/Bdesert_spatRast.rda", package = "npphen")
 #' Bdesert <- readRDS(f)
 #'
-#' # Generate a Raster time series from a particular pixel using a SpatRaster and a date for Northern Chile
+#' # Generate a Raster time series from a particular pixel 
+#' # using a SpatRaster and a date for Northern Chile
 #' bd_pixel <- cellFromXY(Bdesert, cbind(286638, 6852107))
 #' bd_pixelts <- as.numeric(Bdesert[bd_pixel])
 #' plot(modis_dates, bd_pixelts, type = "l")
