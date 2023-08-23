@@ -94,7 +94,7 @@ PhenMap <-
       if (frequency == "monthly") {
         nGS <- 12
       }
-      if (frequency == "bi-monthly") {
+      if(frequency == 'bi-weekly'){
         nGS <- 24
       }
       if (all(is.na(x))) {
@@ -160,8 +160,8 @@ PhenMap <-
         select_DGS <- c(15, 46, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349)
         Ref <- MAXY[select_DGS]
       }
-      if (frequency == "bi-weekly") {
-        select_DGS <- c(1, 15, 32, 46, 60, 74, 91, 105, 121, 135, 152, 166, 182, 196, 213, 227, 244, 258, 274, 288, 305, 319, 335, 349)
+      if(frequency == 'bi-weekly'){
+        select_DGS <- c(1,15,32,46,60,74,91,105,121,135,152,166,182,196,213,227,244,258,274,288,305,319,335,349)
         Ref <- MAXY[select_DGS]
       }
 
