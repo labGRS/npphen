@@ -104,7 +104,7 @@ PhenMap <-
         return(rep(NA, nGS))
       }
 
-      DOY <- yday(dates)
+      DOY <- lubridate::yday(dates)
       DOY[which(DOY == 366)] <- 365
       D1 <- cbind(DOY, x)
       if (length(unique(D1[, 2])) < 10 | (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1))) {
@@ -121,9 +121,9 @@ PhenMap <-
         }
       }
 
-      Hmat <- Hpi(na.omit(D1))
-      Hmat[1, 2] <- Hmat[2, 1]
-      K1 <- kde(na.omit(D1), H = Hmat, xmin = c(1, rge[1]), xmax = c(365, rge[2]), gridsize = c(365, 500))
+      Hmat <- ks::Hpi(na.omit(D1))
+      Hmat[1, 2] <- ks::Hmat[2, 1]
+      K1 <- ks::kde(na.omit(D1), H = Hmat, xmin = c(1, rge[1]), xmax = c(365, rge[2]), gridsize = c(365, 500))
       K1Con <- K1$estimate
 
       for (j in 1:365) {
