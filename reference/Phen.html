@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">npphen</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,13 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/labGRS/npphen/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -35,7 +41,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Phen</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/labGRS/npphen/blob/HEAD/R/Phen.R" class="external-link"><code>R/Phen.R</code></a></small>
       <div class="d-none name"><code>Phen.Rd</code></div>
     </div>
 
@@ -45,7 +51,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Phen</span><span class="op">(</span><span class="va">x</span>, <span class="va">dates</span>, <span class="va">h</span>, frequency <span class="op">=</span> <span class="st">"16-days"</span>, <span class="va">rge</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Phen</span><span class="op">(</span><span class="va">x</span>, <span class="va">dates</span>, <span class="va">h</span>, frequency <span class="op">=</span> <span class="st">"16-days"</span>, <span class="va">rge</span>, plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -59,15 +65,19 @@
 
 
 <dt>h</dt>
-<dd><p>Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h=1 if the vegetation is in the Northern Hemisphere (season starting at January 1st), h=2 if it is in the Southern Hemisphere (season starting at July 1st)</p></dd>
+<dd><p>Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h = 1 if the vegetation is in the Northern Hemisphere (season starting at January 1st), h = 2 if it is in the Southern Hemisphere (season starting at July 1st)</p></dd>
 
 
 <dt>frequency</dt>
-<dd><p>Character string. Defines the number of samples for the output phenology and must be one of the this: 'daily' giving output vector of length 365, '8-days' giving output vector of length 46 (i.e MOD13Q1 and MYD13Q1), 'monthly' giving output vector of length 12,'bi-weekly' giving output vector of length 24 (i.e. GIMMS) or '16-days' (default) giving output vector of length 23 (i.e MOD13Q1 or MYD13Q1).</p></dd>
+<dd><p>Character string. Defines the number of samples for the output phenology and must be one of the following options: 'daily' giving output vector of length 365, '8-days' giving output vector of length 46 (i.e MOD13Q1 and MYD13Q1), 'monthly' giving output vector of length 12,'bi-weekly' giving output vector of length 24 (i.e. GIMMS) or '16-days' (default) giving output vector of length 23 (i.e MOD13Q1 or MYD13Q1).</p></dd>
 
 
 <dt>rge</dt>
 <dd><p>Numeric vector with two values setting the minimum and maximum values of the response variable (e.g. NDVI) used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge = c(0,10000)</p></dd>
+
+
+<dt>plot</dt>
+<dd><p>Logical. Set TRUE (default) or FALSE to show the phenology curve plot.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -92,7 +102,7 @@
 <span class="r-in"><span><span class="co"># Load data</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"phents"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Phenology for the given data</span></span></span>
-<span class="r-in"><span><span class="fu">Phen</span><span class="op">(</span>x<span class="op">=</span><span class="va">phents</span><span class="op">$</span><span class="va">NDVI</span>,dates<span class="op">=</span><span class="va">phents</span><span class="op">$</span><span class="va">dates</span>,h<span class="op">=</span><span class="fl">2</span>,frequency <span class="op">=</span> <span class="st">'16-days'</span>,rge<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10000</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">Phen</span><span class="op">(</span>x <span class="op">=</span> <span class="va">phents</span><span class="op">$</span><span class="va">NDVI</span>, dates <span class="op">=</span> <span class="va">phents</span><span class="op">$</span><span class="va">dates</span>, h <span class="op">=</span> <span class="fl">2</span>, frequency <span class="op">=</span> <span class="st">"16-days"</span>, rge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10000</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="Phen-1.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        1       17       33       49       65       81       97      113 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4809.619 4729.459 4709.419 4729.459 4709.419 4689.379 7254.509 7274.549 </span>
@@ -103,24 +113,23 @@
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## Testing raster data from Central Chile (NDVI), h=2##</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Load data</span></span></span>
-<span class="r-in"><span><span class="co">#RasterStack</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"MegaDrought_stack"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co">#Dates</span></span></span>
+<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/MegaDrought_spatRast.rda"</span>, package <span class="op">=</span> <span class="st">"npphen"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">MegaDrought</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Dates</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"modis_dates"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">#Creates Raster time series using a raster stack and a date database from Central Chile</span></span></span>
+<span class="r-in"><span><span class="co"># Generate a Raster time series using a raster stack and a date database from Central Chile</span></span></span>
 <span class="r-in"><span><span class="co"># Obtain data from a particular pixel generating a time series</span></span></span>
-<span class="r-in"><span><span class="va">md_pixel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/xyCellFrom.html" class="external-link">cellFromXY</a></span><span class="op">(</span><span class="va">MegaDrought_stack</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">313395</span>,<span class="fl">6356610</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">md_pixelts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">MegaDrought_stack</span><span class="op">[</span><span class="va">md_pixel</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">modis_dates</span>,<span class="va">md_pixelts</span>, type<span class="op">=</span><span class="st">'l'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">md_pixel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/xyCellFrom.html" class="external-link">cellFromXY</a></span><span class="op">(</span><span class="va">MegaDrought</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fl">313395</span>, <span class="fl">6356610</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">md_pixelts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">MegaDrought</span><span class="op">[</span><span class="va">md_pixel</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">modis_dates</span>, <span class="va">md_pixelts</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="Phen-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Phenology for the given pixel</span></span></span>
-<span class="r-in"><span><span class="fu">Phen</span><span class="op">(</span>x<span class="op">=</span><span class="va">md_pixelts</span>,dates<span class="op">=</span><span class="va">modis_dates</span>,h<span class="op">=</span><span class="fl">2</span>,frequency<span class="op">=</span><span class="st">'16-days'</span>,rge<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10000</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">Phen</span><span class="op">(</span>x <span class="op">=</span> <span class="va">md_pixelts</span>, dates <span class="op">=</span> <span class="va">modis_dates</span>, h <span class="op">=</span> <span class="fl">2</span>, frequency <span class="op">=</span> <span class="st">"16-days"</span>, rge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10000</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="Phen-3.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        1       17       33       49       65       81       97      113 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5691.383 5791.583 5871.743 5831.663 5811.623 5911.824 5851.703 4789.579 </span>
@@ -132,20 +141,19 @@
 <span class="r-in"><span><span class="co">## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI), h=2 ##</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Load data</span></span></span>
-<span class="r-in"><span><span class="co">#RasterStack</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"Bdesert_stack"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co">#Dates</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"modis_dates"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># SparRaster</span></span></span>
+<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/Bdesert_spatRast.rda"</span>, package <span class="op">=</span> <span class="st">"npphen"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">Bdesert</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">#Creates Raster time series using a raster stack and a date database from Northern Chile</span></span></span>
+<span class="r-in"><span><span class="co"># Generate a Raster time series using a raster stack and a date database from Northern Chile</span></span></span>
 <span class="r-in"><span><span class="co"># Obtain data from a particular pixel generating a time series</span></span></span>
-<span class="r-in"><span><span class="va">bd_pixel</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/xyCellFrom.html" class="external-link">cellFromXY</a></span><span class="op">(</span><span class="va">Bdesert_stack</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">286638</span>,<span class="fl">6852107</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">bd_pixelts</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">Bdesert_stack</span><span class="op">[</span><span class="va">bd_pixel</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">modis_dates</span>,<span class="va">bd_pixelts</span>, type <span class="op">=</span> <span class="st">'l'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">bd_pixel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/xyCellFrom.html" class="external-link">cellFromXY</a></span><span class="op">(</span><span class="va">Bdesert</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fl">286638</span>, <span class="fl">6852107</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">bd_pixelts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">Bdesert</span><span class="op">[</span><span class="va">bd_pixel</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">modis_dates</span>, <span class="va">bd_pixelts</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="Phen-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Phenology for the given pixel</span></span></span>
-<span class="r-in"><span><span class="fu">Phen</span><span class="op">(</span>x<span class="op">=</span><span class="va">bd_pixelts</span>,dates<span class="op">=</span><span class="va">modis_dates</span>,h<span class="op">=</span><span class="fl">2</span>,frequency<span class="op">=</span><span class="st">'16-days'</span>,rge<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10000</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">Phen</span><span class="op">(</span>x <span class="op">=</span> <span class="va">bd_pixelts</span>, dates <span class="op">=</span> <span class="va">modis_dates</span>, h <span class="op">=</span> <span class="fl">2</span>, frequency <span class="op">=</span> <span class="st">"16-days"</span>, rge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10000</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="Phen-5.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        1       17       33       49       65       81       97      113 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 721.4429 721.4429 721.4429 721.4429 701.4028 701.4028 681.3627 681.3627 </span>
