@@ -122,7 +122,7 @@ PhenMap <-
       }
 
       Hmat <- ks::Hpi(na.omit(D1))
-      Hmat[1, 2] <- ks::Hmat[2, 1]
+      Hmat[1, 2] <- Hmat[2, 1]
       K1 <- ks::kde(na.omit(D1), H = Hmat, xmin = c(1, rge[1]), xmax = c(365, rge[2]), gridsize = c(365, 500))
       K1Con <- K1$estimate
 
