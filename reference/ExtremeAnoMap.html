@@ -140,7 +140,7 @@
 <span class="r-in"><span>  anop <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">884</span><span class="op">:</span><span class="fl">929</span><span class="op">)</span>, rfd <span class="op">=</span> <span class="fl">0.9</span>, output <span class="op">=</span> <span class="st">"both"</span>, nCluster <span class="op">=</span> <span class="va">nc1</span>, outname <span class="op">=</span> <span class="st">"anomRFD_MD.tif"</span>,</span></span>
 <span class="r-in"><span>  datatype <span class="op">=</span> <span class="st">"INT2S"</span>, rge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10000</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># map_an1 &lt;- stack("anomRFD_MD.tif")#run only for load anomaly brick</span></span></span>
+<span class="r-in"><span><span class="co"># map_an1 &lt;- rast("anomRFD_MD.tif")#run only for load anomaly brick</span></span></span>
 <span class="r-in"><span><span class="co"># plot(map_an1)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI),</span></span></span>
@@ -161,7 +161,7 @@
 <span class="r-in"><span>  anop <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">723</span><span class="op">:</span><span class="fl">768</span><span class="op">)</span>, rfd <span class="op">=</span> <span class="fl">0.9</span>, output <span class="op">=</span> <span class="st">"both"</span>, nCluster <span class="op">=</span> <span class="va">nc1</span>, outname <span class="op">=</span> <span class="st">"anomRFD_BD.tif"</span>,</span></span>
 <span class="r-in"><span>  datatype <span class="op">=</span> <span class="st">"INT2S"</span>, rge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10000</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># map_an1 &lt;- stack("anomRFD_BD.tif")#run only for load anomaly brick</span></span></span>
+<span class="r-in"><span><span class="co"># map_an1 &lt;- rast("anomRFD_BD.tif")#run only for load anomaly brick</span></span></span>
 <span class="r-in"><span><span class="co"># plot(map_an1)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
