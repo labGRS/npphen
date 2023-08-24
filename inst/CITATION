@@ -1,18 +1,13 @@
 citHeader("To cite npphen in publications use:")
 
-citEntry(entry = "Manual",
-  title        = "{npphen}: an R-package for Vegetation Phenological Cycle and Anomaly Detection using Remote
-        Sensing Data.",
-  author       = personList(as.person("Roberto O. Chávez"),
-                   as.person("Sergio A. Estay"),as.person("José A. Lastra"),as.person("Carlos G. Riquelme")),
-  year         = "2022",
-  textVersion  =
-  paste("Chávez, R.O., Estay, S.A., Lastra, J.A., Riquelme, C.G. (2022).",
-        "npphen. an R-package for Vegetation Phenological Cycle and Anomaly Detection using Remote
-        Sensing Data.",
-        "PUCV, AUCH,  Chile.")
-)
-
-
+bibentry(
+  bibtype = "Manual",
+  title = "{npphen}: an R-package for Vegetation Phenological Cycle and Anomaly Detection using Remote
+        Sensing Data",
+  author = as.person("Roberto O. Chávez, Sergio A. Estay, José A. Lastra, Carlos G. Riquelme"),
+  address = "Chile",
+  year = 2023,
+  url = "https://CRAN.R-project.org/package=npphen",
+  textVersion = paste("Chávez, R.O., Estay, S.A., Lastra, J.A., Riquelme, C.G. (2023).","npphen: an R-package for Vegetation Phenological Cycle and Anomaly Detection using Remote Sensing Data.","PUCV, AUCH,  Chile."))
 
 
