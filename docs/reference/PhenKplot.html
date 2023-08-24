@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">npphen</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,13 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/labGRS/npphen/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -35,7 +41,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>PhenKplot</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/labGRS/npphen/blob/HEAD/R/PhenKplot.R" class="external-link"><code>R/PhenKplot.R</code></a></small>
       <div class="d-none name"><code>PhenKplot.Rd</code></div>
     </div>
 
@@ -51,7 +57,7 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>Numeric vector. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input values if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000</p></dd>
+<dd><p>Numeric vector. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input values if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000)</p></dd>
 
 
 <dt>dates</dt>
@@ -59,24 +65,24 @@
 
 
 <dt>h</dt>
-<dd><p>Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h=1 if the vegetation is in the Northern Hemisphere (season starting at January 1st), h=2 if it is in the Southern Hemisphere (season starting at July 1st)</p></dd>
+<dd><p>Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h = 1 if the vegetation is in the Northern Hemisphere (season starting on January 1st), h = 2 if it is in the Southern Hemisphere (season starting on July 1st)</p></dd>
 
 
 <dt>xlab</dt>
-<dd><p>Character vector (or expression) giving plot title in x axis label</p></dd>
+<dd><p>Character vector (or expression) giving plot title in x axis label (e.g. xlab = "day of the growing season")</p></dd>
 
 
 <dt>ylab</dt>
-<dd><p>Character vector (or expression) giving plot title in y axis label</p></dd>
+<dd><p>Character vector (or expression) giving plot title in y axis label (e.g. ylab = "NDVI")</p></dd>
 
 
 <dt>rge</dt>
-<dd><p>Numeric vector with two values setting the minimum and maximum values of the response variable (e.g. NDVI) used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge =c(0,10000)</p></dd>
+<dd><p>Numeric vector with the minimum and maximum values of the vegetation index (e.g. NDVI) used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge = c(0,10000)</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>It is the graphical version of the <code><a href="Phen.html">Phen</a></code> function. It calculates and plot a likelihood map of the vegetation-greenness – time space using a numeric vector of vegetation canopy greenness values (e.g. Leaf Area Index (LAI) or greenness proxies values such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). Also a vector with dates for the greenness values is required. This function calculates the confidence areas on a per year basis. Functions for confidence intervals on per day basis are under development. This function is partially based on the ci2d function on package <a href="https://CRAN.R-project.org/package=gplots" class="external-link">gplots</a>.</p>
+    <p>It is a "heatmap" of the annual phenological variability of the <code><a href="Phen.html">Phen</a></code> output. It calculates and plot a likelihood map of the vegetation-index–time space using a numeric vector of greenness proxies such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). Also a vector with dates for the vegetation index values is required. This function is partially based on the ci2d function on package <a href="https://CRAN.R-project.org/package=gplots" class="external-link">gplots</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -86,56 +92,67 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \dontshow{</span></span></span>
-<span class="r-in"><span><span class="co">## Testing function with time series of Nothofagus macrocarpa (NDVI)</span></span></span>
+<span class="r-in"><span><span class="co">## Testing the function with an NDVI time series of a deciduous Nothofagus macrocarpa forest</span></span></span>
 <span class="r-in"><span><span class="co"># Load data</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"phents"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># PhenKplot for the given data</span></span></span>
-<span class="r-in"><span><span class="fu">PhenKplot</span><span class="op">(</span>x<span class="op">=</span><span class="va">phents</span><span class="op">$</span><span class="va">NDVI</span>,dates<span class="op">=</span><span class="va">phents</span><span class="op">$</span><span class="va">dates</span>,h<span class="op">=</span><span class="fl">2</span>,</span></span>
-<span class="r-in"><span>xlab <span class="op">=</span> <span class="st">"Day of growing season [DGS]"</span>,</span></span>
-<span class="r-in"><span>ylab <span class="op">=</span> <span class="st">"NDVI"</span>,rge<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10000</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">PhenKplot</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">phents</span><span class="op">$</span><span class="va">NDVI</span>, dates <span class="op">=</span> <span class="va">phents</span><span class="op">$</span><span class="va">dates</span>, h <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  xlab <span class="op">=</span> <span class="st">"Day of the growing season"</span>,</span></span>
+<span class="r-in"><span>  ylab <span class="op">=</span> <span class="st">"NDVI"</span>, rge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10000</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="PhenKplot-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## Testing raster data from Central Chile (NDVI), h=2##</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Load data</span></span></span>
-<span class="r-in"><span><span class="co">#RasterStack</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"MegaDrought_stack"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co">#Dates</span></span></span>
+<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/MegaDrought_spatRast.rda"</span>, package <span class="op">=</span> <span class="st">"npphen"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">MegaDrought</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>cannot open compressed file '', probable reason 'Invalid argument'</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in gzfile(file, "rb"):</span> cannot open the connection</span>
+<span class="r-in"><span><span class="co"># Dates</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"modis_dates"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Generate a Raster time series using a raster stack and a date database from Central Chile</span></span></span>
-<span class="r-in"><span><span class="co"># Obtain data from a particular pixel generating a time series</span></span></span>
-<span class="r-in"><span><span class="va">md_pixel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/xyCellFrom.html" class="external-link">cellFromXY</a></span><span class="op">(</span><span class="va">MegaDrought_stack</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">313395</span>,<span class="fl">6356610</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">md_pixelts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">MegaDrought_stack</span><span class="op">[</span><span class="va">md_pixel</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">modis_dates</span>,<span class="va">md_pixelts</span>, type<span class="op">=</span><span class="st">'l'</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="PhenKplot-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co"># Generate a Raster time series from a particular pixel </span></span></span>
+<span class="r-in"><span><span class="co"># using a SpatRaster and a date for Central Chile</span></span></span>
+<span class="r-in"><span><span class="va">md_pixel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/xyCellFrom.html" class="external-link">cellFromXY</a></span><span class="op">(</span><span class="va">MegaDrought</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fl">313395</span>, <span class="fl">6356610</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'object' in selecting a method for function 'cellFromXY': object 'MegaDrought' not found</span>
+<span class="r-in"><span><span class="va">md_pixelts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">MegaDrought</span><span class="op">[</span><span class="va">md_pixel</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'MegaDrought' not found</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">modis_dates</span>, <span class="va">md_pixelts</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'y' in selecting a method for function 'plot': object 'md_pixelts' not found</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Phenology for the given pixel</span></span></span>
-<span class="r-in"><span><span class="fu">PhenKplot</span><span class="op">(</span>x<span class="op">=</span><span class="va">md_pixelts</span>,dates<span class="op">=</span><span class="va">modis_dates</span>,h<span class="op">=</span><span class="fl">2</span>,xlab<span class="op">=</span><span class="st">"DGS"</span>, ylab<span class="op">=</span><span class="st">"NDVI"</span>, rge<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10000</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="PhenKplot-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co"># Variability of the annual phenology for the given pixel</span></span></span>
+<span class="r-in"><span><span class="fu">PhenKplot</span><span class="op">(</span>x <span class="op">=</span> <span class="va">md_pixelts</span>, dates <span class="op">=</span> <span class="va">modis_dates</span>,</span></span>
+<span class="r-in"><span>h <span class="op">=</span> <span class="fl">2</span>, xlab <span class="op">=</span> <span class="st">"DGS"</span>, ylab <span class="op">=</span> <span class="st">"NDVI"</span>, rge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10000</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'md_pixelts' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI), h=2 ##</span></span></span>
+<span class="r-in"><span><span class="co">## Testing with the Bdesert_spatRast from </span></span></span>
+<span class="r-in"><span><span class="co">## the Atacama Desert, Northern Chile (NDVI), h=2 ##</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Load data</span></span></span>
-<span class="r-in"><span><span class="co">#RasterStack</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"Bdesert_stack"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co">#Dates</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"modis_dates"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># SparRaster</span></span></span>
+<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/Bdesert_spatRast.rda"</span>, package <span class="op">=</span> <span class="st">"npphen"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">Bdesert</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>cannot open compressed file '', probable reason 'Invalid argument'</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in gzfile(file, "rb"):</span> cannot open the connection</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Generate a Raster time series using a raster stack and a date database from Northern Chile</span></span></span>
-<span class="r-in"><span><span class="co"># Obtain data from a particular pixel generating a time series</span></span></span>
-<span class="r-in"><span><span class="va">bd_pixel</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/xyCellFrom.html" class="external-link">cellFromXY</a></span><span class="op">(</span><span class="va">Bdesert_stack</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">286638</span>,<span class="fl">6852107</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">bd_pixelts</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">Bdesert_stack</span><span class="op">[</span><span class="va">bd_pixel</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">modis_dates</span>,<span class="va">bd_pixelts</span>, type <span class="op">=</span> <span class="st">'l'</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="PhenKplot-4.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co"># Generate a Raster time series from a particular pixel </span></span></span>
+<span class="r-in"><span><span class="co"># using a SpatRaster and a date for Northern Chile</span></span></span>
+<span class="r-in"><span><span class="va">bd_pixel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/xyCellFrom.html" class="external-link">cellFromXY</a></span><span class="op">(</span><span class="va">Bdesert</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fl">286638</span>, <span class="fl">6852107</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'object' in selecting a method for function 'cellFromXY': object 'Bdesert' not found</span>
+<span class="r-in"><span><span class="va">bd_pixelts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">Bdesert</span><span class="op">[</span><span class="va">bd_pixel</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'Bdesert' not found</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">modis_dates</span>, <span class="va">bd_pixelts</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'y' in selecting a method for function 'plot': object 'bd_pixelts' not found</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Phenology for the given pixel</span></span></span>
-<span class="r-in"><span><span class="fu">PhenKplot</span><span class="op">(</span>x<span class="op">=</span><span class="va">bd_pixelts</span>,dates<span class="op">=</span><span class="va">modis_dates</span>,h<span class="op">=</span><span class="fl">2</span>,xlab <span class="op">=</span> <span class="st">'DGS'</span>,ylab <span class="op">=</span> <span class="st">'NDVI'</span>,rge<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10000</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="PhenKplot-5.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co"># Variability of the annual phenology for the given pixel</span></span></span>
+<span class="r-in"><span><span class="fu">PhenKplot</span><span class="op">(</span>x <span class="op">=</span> <span class="va">bd_pixelts</span>, dates <span class="op">=</span> <span class="va">modis_dates</span>, </span></span>
+<span class="r-in"><span>h <span class="op">=</span> <span class="fl">2</span>, xlab <span class="op">=</span> <span class="st">"DGS"</span>, ylab <span class="op">=</span> <span class="st">"NDVI"</span>, rge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10000</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'bd_pixelts' not found</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

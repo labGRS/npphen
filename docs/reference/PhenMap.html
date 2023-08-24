@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">npphen</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,13 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/labGRS/npphen/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -35,7 +41,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>PhenMap</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/labGRS/npphen/blob/HEAD/R/PhenMap.R" class="external-link"><code>R/PhenMap.R</code></a></small>
       <div class="d-none name"><code>PhenMap.Rd</code></div>
     </div>
 
@@ -45,26 +51,25 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">PhenMap</span><span class="op">(</span><span class="va">s</span>, <span class="va">dates</span>, <span class="va">h</span>, frequency <span class="op">=</span> <span class="st">"16-days"</span>, <span class="va">nCluster</span>, <span class="va">outname</span>, <span class="va">format</span>,</span>
-<span>  <span class="va">datatype</span>, <span class="va">rge</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">PhenMap</span><span class="op">(</span><span class="va">s</span>, <span class="va">dates</span>, <span class="va">h</span>, frequency <span class="op">=</span> <span class="st">"16-days"</span>, <span class="va">nCluster</span>, <span class="va">outname</span>, <span class="va">datatype</span>, <span class="va">rge</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>s</dt>
-<dd><p>Raster stack of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input raster stack if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000</p></dd>
+<dd><p>SpatRaster of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input SpatRaster if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000)</p></dd>
 
 
 <dt>dates</dt>
-<dd><p>A date vector. The number of dates must be equal to the number of "x" values (numeric input vector).</p></dd>
+<dd><p>A date vector. The number of dates must be equal to the number of layers of the vegetation index SpatRaster.</p></dd>
 
 
 <dt>h</dt>
-<dd><p>Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h=1 if the vegetation is in the Northern Hemisphere (season starting at January 1st), h=2 if it is in the Southern Hemisphere (season starting at July 1st)</p></dd>
+<dd><p>Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h = 1 if the vegetation is in the Northern Hemisphere (season starting on January 1st), h = 2 if it is in the Southern Hemisphere (season starting on July 1st)</p></dd>
 
 
 <dt>frequency</dt>
-<dd><p>Character string. Defines the number of samples for the output phenology and must be one of the this: 'daily' giving output vector of length 365, '8-days' giving output vector of length 46 (i.e MOD13Q1 and MYD13Q1), 'monthly' giving output vector of length 12,'bi-weekly' giving output vector of length 24 (i.e. GIMMS) or '16-days' (default) giving output vector of length 23 (i.e MOD13Q1 or MYD13Q1).</p></dd>
+<dd><p>Character string. Defines the number of samples for the output phenology and must be one of the following options: 'daily' with an output vector of length 365, '8-days' with an output vector of length 46 (e.g. MOD13Q1 and MYD13Q1 combined), 'monthly' with an output vector of length 12,'bi-weekly' with an output vector of length 24 (i.e. GIMMS) or '16-days' (default) with an output vector of length 23 (i.e MOD13Q1 or MYD13Q1)</p></dd>
 
 
 <dt>nCluster</dt>
@@ -72,30 +77,26 @@
 
 
 <dt>outname</dt>
-<dd><p>Character vector with the output path and filename with extension or only the filename and extension if work directory was set. For example outname = "output_phen.tif". See <code><a href="https://rdrr.io/pkg/terra/man/writeRaster.html" class="external-link">writeRaster</a></code></p></dd>
-
-
-<dt>format</dt>
-<dd><p>Character. Output file type. See <code><a href="https://rdrr.io/pkg/raster/man/writeFormats.html" class="external-link">writeFormats</a></code></p></dd>
+<dd><p>Character vector with the output directory path and filename with extension or only the filename and extension if working directory was set. For example outname = "output_phen.tif". See <code><a href="https://rdrr.io/pkg/terra/man/writeRaster.html" class="external-link">writeRaster</a></code></p></dd>
 
 
 <dt>datatype</dt>
-<dd><p>Character. Output data type. See <code><a href="https://rdrr.io/pkg/raster/man/dataType.html" class="external-link">dataType</a></code></p></dd>
+<dd><p>Character. Output data type. For example datatype = "INT2S" for signed integer values. See <code><a href="https://rdrr.io/pkg/terra/man/writeRaster.html" class="external-link">writeRaster</a></code></p></dd>
 
 
 <dt>rge</dt>
-<dd><p>A vector containing minimum and maximum values of the response variable used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge =c(0,10000)</p></dd>
+<dd><p>A vector containing minimum and maximum values of the vegetation index used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge = c(0,10000)</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>RasterStack</p>
+<p>SpatRaster</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Derives the annual Land Surface Phenological (LSP) cycle for a standard growing season using a raster stack of satellite based greenness values such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). The LSP cycle is calculated for all pixels of the input raster stack in the same way as for the <code><a href="Phen.html">Phen</a></code> function. The output is a multiband raster where every band is the expected greenness value at a given time step of the standard growing season. For example, for MODIS Vegetation Index 16-days composites the number of time steps of the growing season is 23 (frequency = "16-days"), and therefore, the output raster will have 23 bands. A vector with dates for the greenness values is also required.</p>
+    <p>Per pixel, it derives the most recurrent annual Land Surface Phenology (LSP) for a reference period  using time series of satellite based greenness values such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). The annual LSP is calculated for all pixels of the input SpatRaster in the same way as for the <code><a href="Phen.html">Phen</a></code> function. The output is a multiband raster where every band is the expected greenness value at a given time step of the growing season. For example, for MODIS Vegetation Index 16-days composites the number of time steps of the growing season is 23 (frequency = "16-days"), and therefore, the output raster will have 23 bands. A vector with dates for the greenness values is also required</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -105,46 +106,51 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="co">##DEPENDING ON HARDWARE, THIS PROCESS CAN BE HIGHLY TIME CONSUMING##</span></span></span>
+<span class="r-in"><span><span class="co">## DEPENDING ON HARDWARE, THIS PROCESS CAN BE HIGHLY TIME CONSUMING##</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Testing raster data from Central Chile (NDVI), h=2##</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Load data</span></span></span>
-<span class="r-in"><span><span class="co">#RasterStack</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"MegaDrought_stack"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co">#Dates</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"modis_dates"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Making the LSP raster, n bands = 23</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">snow</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Define the number of cores to be use. In this example we use 1</span></span></span>
-<span class="r-in"><span><span class="va">nc1</span><span class="op">&lt;-</span><span class="fl">1</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">PhenMap</span><span class="op">(</span>s <span class="op">=</span> <span class="va">MegaDrought_stack</span>,dates <span class="op">=</span> <span class="va">modis_dates</span>,h <span class="op">=</span> <span class="fl">2</span>,</span></span>
-<span class="r-in"><span>frequency <span class="op">=</span> <span class="st">'16-days'</span>,nCluster <span class="op">=</span> <span class="va">nc1</span>,outname <span class="op">=</span> <span class="st">'phen_MD.tif'</span>,</span></span>
-<span class="r-in"><span>format <span class="op">=</span> <span class="st">'GTiff'</span>,datatype <span class="op">=</span> <span class="st">'INT2S'</span>,rge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10000</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co">#map1 &lt;- stack("phen_MD.tif")#run only for load phenology brick</span></span></span>
-<span class="r-in"><span><span class="co">#plot(map1)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI), h=2 ##</span></span></span>
+<span class="r-in"><span><span class="co">## Testing with an NDVI spatRast from Central Chile, h = 2##</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Load data</span></span></span>
-<span class="r-in"><span><span class="va">RasterStack</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"Bdesert_stack"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co">#Dates</span></span></span>
+<span class="r-in"><span><span class="co"># SpatRaster</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/MegaDrought_spatRast.rda"</span>, package <span class="op">=</span> <span class="st">"npphen"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">MegaDrought</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Dates</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"modis_dates"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Making the LSP raster, n bands = 23</span></span></span>
-<span class="r-in"><span><span class="co"># Define the number of cores to be use. In this example we use 1</span></span></span>
-<span class="r-in"><span><span class="va">nc1</span><span class="op">&lt;-</span><span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="co"># Making the LSP output raster, n bands = 23</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">PhenMap</span><span class="op">(</span>s<span class="op">=</span> <span class="va">Bdesert_stack</span>,dates<span class="op">=</span><span class="va">modis_dates</span>,h<span class="op">=</span><span class="fl">2</span>,</span></span>
-<span class="r-in"><span>frequency<span class="op">=</span><span class="st">'16-days'</span>, nCluster<span class="op">=</span><span class="va">nc1</span>,outname<span class="op">=</span><span class="st">"phen_BD.tif"</span>, </span></span>
-<span class="r-in"><span>format<span class="op">=</span><span class="st">"GTiff"</span>, datatype<span class="op">=</span><span class="st">"INT2S"</span>,rge<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10000</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co">#map2 &lt;- stack("phen_BD.tif") #run only for load phenology brick</span></span></span>
-<span class="r-in"><span><span class="co">#plot(map2)</span></span></span>
+<span class="r-in"><span><span class="co"># Define the number of cores to be use. In this example we use 1</span></span></span>
+<span class="r-in"><span><span class="va">nc1</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">PhenMap</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  s <span class="op">=</span> <span class="va">MegaDrought</span>, dates <span class="op">=</span> <span class="va">modis_dates</span>, h <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  frequency <span class="op">=</span> <span class="st">"16-days"</span>, nCluster <span class="op">=</span> <span class="va">nc1</span>, outname <span class="op">=</span> <span class="st">"phen_MD.tif"</span>,</span></span>
+<span class="r-in"><span>  datatype <span class="op">=</span> <span class="st">"INT2S"</span>, rge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10000</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># map1 &lt;- rast("phen_MD.tif")#run only for load phenology brick</span></span></span>
+<span class="r-in"><span><span class="co"># plot(map1)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Testing with an NDVI spatRast from the Atacama Desert, Northern Chile, h=2 ##</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Load data</span></span></span>
+<span class="r-in"><span><span class="va">SpatRaster</span></span></span>
+<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/Bdesert_spatRast.rda"</span>, package <span class="op">=</span> <span class="st">"npphen"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">Bdesert</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Dates</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"modis_dates"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Making the LSP output raster, n bands = 23</span></span></span>
+<span class="r-in"><span><span class="co"># Define the number of cores to be use. In this example we use 1</span></span></span>
+<span class="r-in"><span><span class="va">nc1</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">PhenMap</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  s <span class="op">=</span> <span class="va">Bdesert</span>, dates <span class="op">=</span> <span class="va">modis_dates</span>, h <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  frequency <span class="op">=</span> <span class="st">"16-days"</span>, nCluster <span class="op">=</span> <span class="fl">1</span>, outname <span class="op">=</span> <span class="st">"phen_BD.tif"</span>,</span></span>
+<span class="r-in"><span>  datatype <span class="op">=</span> <span class="st">"INT2S"</span>, rge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10000</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># map2 &lt;- rast("phen_BD.tif") #run only for loading the multiband LSP spatRaster</span></span></span>
+<span class="r-in"><span><span class="co"># plot(map2)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
