@@ -63,7 +63,7 @@ ExtremeAnoMap(
   anop = c(884:929), rfd = 0.9, output = "both", nCluster = nc1, outname = "anomRFD_MD.tif",
   datatype = "INT2S", rge = c(0, 10000)
 )
-# map_an1 <- stack("anomRFD_MD.tif")#run only for load anomaly brick
+# map_an1 <- rast("anomRFD_MD.tif")#run only for load anomaly brick
 # plot(map_an1)
 
 ## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI),
@@ -84,7 +84,7 @@ ExtremeAnoMap(
   anop = c(723:768), rfd = 0.9, output = "both", nCluster = nc1, outname = "anomRFD_BD.tif",
   datatype = "INT2S", rge = c(0, 10000)
 )
-# map_an1 <- stack("anomRFD_BD.tif")#run only for load anomaly brick
+# map_an1 <- rast("anomRFD_BD.tif")#run only for load anomaly brick
 # plot(map_an1)
 }
 }
