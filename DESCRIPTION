@@ -12,7 +12,7 @@ Description: Calculates phenological cycle and anomalies using a non-parametric
     manipulating vector data (numerical series) and raster data (satellite derived products).
     Processing of very large raster files is supported. For more information, please check 
     the following paper:
-    Chávez et al. (2023) <https://doi:10.3390/rs15010073>.
+    Chávez et al. (2023) <doi:10.3390/rs15010073>.
 License: GPL (>= 3)
 Depends: R (>= 3.6.0)
 Imports: terra (>= 1.5-17), ks, methods, graphics, stats, lubridate
