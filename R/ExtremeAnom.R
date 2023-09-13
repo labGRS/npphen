@@ -1,7 +1,7 @@
 #' @title ExtremeAnom
 #' @description Based on the annual reference frequency distribution (rfd) of a vegetation index time series (e.g. a numeric vector of NDVI), calculates anomalies and how extreme these anomalies are (rfd position ranging from 0 to 100)
 #' @encoding UTF-8
-#' @param x Numeric vector. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input values if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000)
+#' @param x Numeric vector. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input values if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000).
 #' @param dates A date vector. The number of dates must be equal to the number of "x" values (numeric input vector).
 #' @param h Numeric. Indicates the geographic hemisphere. This argument defines the starting date of the growing season. h = 1 for the Northern Hemisphere (season starting on January 1st), h = 2 for the Southern Hemisphere (season starting on July 1st).
 #' @param refp Numeric vector with the correlative number of dates to be used as reference period. For example, refp = c(1:388) for MODIS Vegetation Index 16-days composites MOD13Q1 (18/02/2000 – 18/12/2016)

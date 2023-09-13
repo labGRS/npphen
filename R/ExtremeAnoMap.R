@@ -1,5 +1,5 @@
 #' @title ExtremeAnoMap
-#' @description Based on the annual reference frequency distribution (RFD) of a vegetation index time series (e.g. a raster stack of NDVI), calculates anomalies and how extreme these anomalies are (RFD position ranging from 0 to 100).
+#' @description Based on the annual reference frequency distribution (rfd) of a vegetation index time series (e.g. a SpatRaster of NDVI), calculates anomalies and how extreme these anomalies are (rfd position ranging from 0 to 100).
 #' @encoding UTF-8
 #' @param s SpatRaster. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior.The code has been optimized to work with integer values. Please re-scale the input SpatRaster if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000).
 #' @param dates A date vector. The number of dates must be equal to the number of layers of the vegetation index SpatRaster.
@@ -8,11 +8,11 @@
 #' @param anop Numeric vector with the correlative number of dates for the period in which the anomalies will be calculated. For example refp = c(21:43) for the first complete year for MODIS Vegetation Index 16-days composites (01/01/2001 – 19/12/2001). anop y refp can overlap
 #' @param rge Numeric vector with the minimum and maximum values of the vegetation index used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge = c(0,10000).
 #' @param output Character string. Defines the outputs. output = 'both' (default) returns both the vegetation index anomalies and rfd position together as a single numeric vector, output = 'anomalies' returns only anomalies, output = 'rfd' returns only rfd values (how extreme the anomalies are) and output = 'clean' returns only anomalies at which a given rfd is overpass (e.g. 0.90). This critical threshold is set by the users using the rfd argument.
-#' @param rfd Numeric. This argument only applies when the argument output = 'clean'. It defines the percentile (from 0 to 0.99) of the reference frequency distribution, for which anomalies are not flagged as extreme anomalies. For example, if 'rfd = 0.90' only anomalies falling outside the '0.90 rfd' (default value) will be flagged as extreme anomalies while the rest will be neglected (NA values). Please notice that'rfd = 0.90' implies that the 5\% of the most extreme positive and 5\% of the most extreme negative anomalies will be considered.
+#' @param rfd Numeric. This argument only applies when the argument output = 'clean'. It defines the percentile (from 0 to 0.99) of the reference frequency distribution, for which anomalies are not flagged as extreme anomalies. For example, if 'rfd = 0.90' only anomalies falling outside the '0.90 rfd' (default value) will be flagged as extreme anomalies while the rest will be neglected (NA values). Please notice that 'rfd = 0.90' implies that the 5\% of the most extreme positive and 5\% of the most extreme negative anomalies will be considered.
 #' @param nCluster	Numeric. Number of CPU cores to be used for computational calculations
 #' @param outname	Character vector with the output directory path and filename with extension or only the filename and extension if the working directory was set. For example outname = "output_anom.tif". See \code{\link[terra]{writeRaster}}
 #' @param datatype	Character. Output data type. For example datatype = "INT2S" for signed integer values. See \code{\link[terra]{writeRaster}}
-#' @details Similar to \code{\link{ExtremeAnom}}, it calculates phenological anomalies but using a raster stack instead of a numeric vector of vegetation canopy greenness values (e.g. Leaf Area Index, LAI) or satellite based greenness proxies such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). For this purpose, it divides the time series (raster stack) of vegetation greenness into 2: the reference period, from which the annual phenological cycle is calculated (same as \code{\link{PhenMap}} function), and the observation period, for which we want to calculate anomalies with respect to the annual phenological cycle. Negative anomalies correspond to observed values lower than the reference and positive anomalies to values higher than the reference. his anomalies can be filtered by the position of the observation within the historical rfd. Users can, for example, set 'rfd = 0.95' to consider only anomalies that outside the 95\% rfd of historical records.
+#' @details Similar to \code{\link{ExtremeAnom}}, it calculates phenological anomalies but using a SpatRaster instead of a numeric vector of vegetation canopy greenness values (e.g. Leaf Area Index, LAI) or satellite based greenness proxies such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). For this purpose, it divides the time series (SpatRaster) of vegetation greenness into 2: the reference period, from which the annual phenological cycle is calculated (same as \code{\link{PhenMap}} function), and the observation period, for which we want to calculate anomalies with respect to the annual phenological cycle. Negative anomalies correspond to observed values lower than the reference and positive anomalies to values higher than the reference. This anomalies can be filtered by the position of the observation within the historical rfd. Users can, for example, set 'rfd = 0.95' to consider only anomalies that outside the 95\% rfd of historical records.
 #' @return SpatRaster
 #' @seealso \code{\link{ExtremeAnom}}
 #' @examples
@@ -38,14 +38,14 @@
 #'   anop = c(884:929), rfd = 0.9, output = "both", nCluster = nc1, outname = "anomRFD_MD.tif",
 #'   datatype = "INT2S", rge = c(0, 10000)
 #' )
-#' # map_an1 <- rast("anomRFD_MD.tif")#run only for load anomaly brick
+#' # map_an1 <- rast("anomRFD_MD.tif") # run only for load anomaly brick
 #' # plot(map_an1)
 #'
 #' ## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI),
 #' # showing extreme positive anomalies (greening)##
 #'
 #' # Load data
-#' SpatRaster
+#' # SpatRaster
 #' f <- system.file("extdata/Bdesert_spatRast.rda", package = "npphen")
 #' Bdesert <- readRDS(f)
 #' # Dates
@@ -59,7 +59,7 @@
 #'   anop = c(723:768), rfd = 0.9, output = "both", nCluster = nc1, outname = "anomRFD_BD.tif",
 #'   datatype = "INT2S", rge = c(0, 10000)
 #' )
-#' # map_an1 <- rast("anomRFD_BD.tif")#run only for load anomaly brick
+#' # map_an1 <- rast("anomRFD_BD.tif") # run only for load anomaly brick
 #' # plot(map_an1)
 #' }
 #' @export
