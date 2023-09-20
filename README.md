@@ -48,6 +48,16 @@ The **npphen** package as a whole is licensed under the GPLv3. See the [LICENSE]
 
 See the recently published paper for applications and examples use of **npphen**: 
 
-* Chávez, R.O.; Estay, S.A.; Lastra, J.A.; Riquelme, C.G.; Olea, M.; Aguayo, J.; Decuyper, M. npphen: An R-Package for Detecting and Mapping Extreme Vegetation Anomalies Based on Remotely Sensed Phenological Variability. Remote Sens. 2023, 15, 73. https://doi.org/10.3390/rs15010073 
+* Chávez, R.O.; Estay, S.A.; Lastra, J.A.; Riquelme, C.G.; Olea, M.; Aguayo, J.; Decuyper, M. **npphen: An R-Package for Detecting and Mapping Extreme Vegetation Anomalies Based on Remotely Sensed Phenological Variability**. Remote Sens. 2023, 15, 73. https://doi.org/10.3390/rs15010073 
+
+* Estay, S.A.; Chávez, R.O.; Rocco, R.; Gutiérrez, A.G. Quantifying Massive Outbreaks of the Defoliator Moth Ormiscodes Amphimone in Deciduous Nothofagus-Dominated Southern Forests Using Remote Sensing Time Series Analysis. J. Appl. Entomol. 2019, 143, 787–796. https://doi.org/10.1111/jen.12643
+
+* Chávez, R.O.; Rocco, R.; Gutiérrez, Á.G.; Dörner, M.; Estay, S.A. A Self-Calibrated Non-Parametric Time Series Analysis Approach for Assessing Insect Defoliation of Broad-Leaved Deciduous Nothofagus Pumilio Forests. Remote Sens. 2019, 11, 204. https://doi.org/10.3390/rs11020204
+
+* Decuyper, M.; Chávez, R.O.; Čufar, K.; Estay, S.A.; Clevers, J.G.P.W.; Prislan, P.; Gričar, J.; Črepinšek, Z.; Merela, M.; de Luis, M.; et al. Spatio-Temporal Assessment of Beech Growth in Relation to Climate Extremes in Slovenia—An Integrated Approach Using Remote Sensing and Tree-Ring Data. Agric. For. Meteorol. 2020, 287, 107925. https://doi.org/10.1016/j.agrformet.2020.107925
+
+* Chávez, R.O.; Moreira-Muñoz, A.; Galleguillos, M.; Olea, M.; Aguayo, J.; Latín, A.; Aguilera-Betti, I.; Muñoz, A.A.; Manríquez, H. GIMMS NDVI Time Series Reveal the Extent, Duration, and Intensity of “Blooming Desert” Events in the Hyper-Arid Atacama Desert, Northern Chile. Int. J. Appl. Earth Obs. Geoinf. 2019, 76, 193–203. https://doi.org/10.1016/j.jag.2018.11.013
+
+* Chávez, R.O.; Castillo-Soto, M.E.; Traipe, K.; Olea, M.; Lastra, J.A.; Quiñones, T. A Probabilistic Multi-Source Remote Sensing Approach to Evaluate Extreme Precursory Drought Conditions of a Wildfire Event in Central Chile. Front. Environ. Sci. 2022, 10, 427. https://doi.org/10.3389/fenvs.2022.865406
 
 
