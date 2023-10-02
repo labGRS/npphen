@@ -81,7 +81,7 @@ PhenKplot <-
     }
 
     if (all(x < rge[1]) | all(x > rge[2], na.rm = T)) {
-      stop("Inconsistency between rge and x. Please check your input data.")
+      stop("Inconsistency between rge and x. Please check your input data")
     }
 
     DOY <- lubridate::yday(dates)
