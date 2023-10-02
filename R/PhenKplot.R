@@ -77,7 +77,7 @@ PhenKplot <-
     nGS <- 365
 
     if (all(is.na(x))) {
-      stop("Vector with only NA's. Please check your input data.")
+      stop("Vector with only NA's. Please check your input data")
     }
 
     if (all(x < rge[1]) | all(x > rge[2], na.rm = T)) {
