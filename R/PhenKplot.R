@@ -141,8 +141,8 @@ PhenKplot <-
     
     na.sta <- first.no.NA.DOY-1
     na.end <- last.no.NA.DOY+1
-    h2d$cumDensity[1:na.sta,] <- NA
-    h2d$cumDensity[na.end:365,] <- NA
+    if(na.sta>=1) {h2d$cumDensity[1:na.sta,] <- NA}
+    if(na.end<=365) {h2d$cumDensity[na.end:365,] <- NA}
 
     image(h2d$x, h2d$y, h2d$cumDensity, xlab = xlab, ylab = ylab, font.lab = 2, breaks = c(0, 0.5, 0.75, 0.9, 0.95), col = grDevices::heat.colors(n = 4, alpha = 0.6))
     contour(h2d$x, h2d$y, h2d$cumDensity, levels = c(0, 0.5, 0.75, 0.9, 0.95), add = T, col = grDevices::grey(0.25), labcex = 1)
