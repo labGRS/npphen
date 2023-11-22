@@ -3,6 +3,7 @@ npphen 2.0.0
 
 * Remove raster & rgdal dependencies
 * Migrate to terra for raster data processing
+* All functions now remove data outside the boundaries of the series to avoid extrapolation
 * Fix minor bugs
 
 npphen 1.5.2 

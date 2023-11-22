@@ -134,10 +134,10 @@ PhenKplot <-
     h2d$y <- seq(rge[1], rge[2], len = 500)
     h2d$density <- K1Con / sum(K1Con)
     uniqueVals <- rev(unique(sort(h2d$density)))
-    cumProbs <- cumsum(uniqueVals)
-    names(cumProbs) <- uniqueVals
+    cumRFDs <- cumsum(uniqueVals)
+    names(cumRFDs) <- uniqueVals
     h2d$cumDensity <- matrix(nrow = nrow(h2d$density), ncol = ncol(h2d$density))
-    h2d$cumDensity[] <- cumProbs[as.character(h2d$density)]
+    h2d$cumDensity[] <- cumRFDs[as.character(h2d$density)]
     
     na.sta <- first.no.NA.DOY-1
     na.end <- last.no.NA.DOY+1
