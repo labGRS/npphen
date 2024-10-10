@@ -150,6 +150,10 @@ ExtremeAnoMap <-
         Kdiv <- sum(K1$estimate[j, ])
         ifelse(Kdiv == 0, K1Con[j, ] <- 0, K1Con[j, ] <- K1$estimate[j, ] / sum(K1$estimate[j, ]))
       }
+      
+      first.no.NA.DOY <- min(D1[,1][which(is.na(D1[,2])==FALSE)])
+      last.no.NA.DOY <- max(D1[,1][which(is.na(D1[,2])==FALSE)])
+      
       MAXY <- apply(K1Con, 1, max)
       for (i in 1:365) {
         n.select <- which(K1Con[i, ] == MAXY[i], arr.ind = TRUE)
@@ -161,6 +165,8 @@ ExtremeAnoMap <-
           n <- n.select
           MAXY[i] <- median(K1$eval.points[[2]][n])
         }
+        if (i < first.no.NA.DOY) {MAXY[i] <- NA}
+        if (i > last.no.NA.DOY) {MAXY[i] <- NA}
       }
 
       h2d <- list()
@@ -173,6 +179,11 @@ ExtremeAnoMap <-
       h2d$cumDensity <- matrix(nrow = nrow(h2d$density), ncol = ncol(h2d$density))
       h2d$cumDensity[] <- cumRFDs[as.character(h2d$density)]
 
+      na.sta <- first.no.NA.DOY-1
+      na.end <- last.no.NA.DOY+1
+      if(na.sta>=1) {h2d$cumDensity[1:na.sta,] <- NA}
+      if(na.end<=365) {h2d$cumDensity[na.end:365,] <- NA}
+      
       if (h == 2) {
         for (i in 1:nrow(D2)) {
           D2[i, 1] <- DOGS[which(DOGS[, 1] == D2[i, 1], arr.ind = TRUE), 2]

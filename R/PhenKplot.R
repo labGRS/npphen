@@ -77,11 +77,11 @@ PhenKplot <-
     nGS <- 365
 
     if (all(is.na(x))) {
-      stop("Vector with only NA's. Please check your input data.")
+      stop("Vector with only NA's. Please check your input data")
     }
 
     if (all(x < rge[1]) | all(x > rge[2], na.rm = T)) {
-      stop("Inconsistency between rge and x. Please check your input data.")
+      stop("Inconsistency between rge and x. Please check your input data")
     }
 
     DOY <- lubridate::yday(dates)
@@ -110,6 +110,9 @@ PhenKplot <-
       Kdiv <- sum(K1$estimate[j, ])
       ifelse(Kdiv == 0, K1Con[j, ] <- 0, K1Con[j, ] <- K1$estimate[j, ] / sum(K1$estimate[j, ]))
     }
+    
+    first.no.NA.DOY <- min(D1[,1][which(is.na(D1[,2])==FALSE)])
+    last.no.NA.DOY <- max(D1[,1][which(is.na(D1[,2])==FALSE)])
 
     MAXY <- apply(K1Con, 1, max)
     for (i in 1:365) {
@@ -122,6 +125,8 @@ PhenKplot <-
         n <- n.select
         MAXY[i] <- median(K1$eval.points[[2]][n])
       }
+      if (i < first.no.NA.DOY) {MAXY[i] <- NA}
+      if (i > last.no.NA.DOY) {MAXY[i] <- NA}
     }
 
     h2d <- list()
@@ -129,10 +134,15 @@ PhenKplot <-
     h2d$y <- seq(rge[1], rge[2], len = 500)
     h2d$density <- K1Con / sum(K1Con)
     uniqueVals <- rev(unique(sort(h2d$density)))
-    cumProbs <- cumsum(uniqueVals)
-    names(cumProbs) <- uniqueVals
+    cumRFDs <- cumsum(uniqueVals)
+    names(cumRFDs) <- uniqueVals
     h2d$cumDensity <- matrix(nrow = nrow(h2d$density), ncol = ncol(h2d$density))
-    h2d$cumDensity[] <- cumProbs[as.character(h2d$density)]
+    h2d$cumDensity[] <- cumRFDs[as.character(h2d$density)]
+    
+    na.sta <- first.no.NA.DOY-1
+    na.end <- last.no.NA.DOY+1
+    if(na.sta>=1) {h2d$cumDensity[1:na.sta,] <- NA}
+    if(na.end<=365) {h2d$cumDensity[na.end:365,] <- NA}
 
     image(h2d$x, h2d$y, h2d$cumDensity, xlab = xlab, ylab = ylab, font.lab = 2, breaks = c(0, 0.5, 0.75, 0.9, 0.95), col = grDevices::heat.colors(n = 4, alpha = 0.6))
     contour(h2d$x, h2d$y, h2d$cumDensity, levels = c(0, 0.5, 0.75, 0.9, 0.95), add = T, col = grDevices::grey(0.25), labcex = 1)

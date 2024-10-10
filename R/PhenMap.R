@@ -131,6 +131,9 @@ PhenMap <-
         ifelse(Kdiv == 0, K1Con[j, ] <- 0, K1Con[j, ] <- K1$estimate[j, ] / sum(K1$estimate[j, ]))
       }
 
+      first.no.NA.DOY <- min(D1[,1][which(is.na(D1[,2])==FALSE)])
+      last.no.NA.DOY <- max(D1[,1][which(is.na(D1[,2])==FALSE)])
+      
       MAXY <- apply(K1Con, 1, max)
       for (i in 1:365) {
         n.select <- which(K1Con[i, ] == MAXY[i], arr.ind = TRUE)
@@ -142,6 +145,8 @@ PhenMap <-
           n <- n.select
           MAXY[i] <- median(K1$eval.points[[2]][n])
         }
+        if (i < first.no.NA.DOY) {MAXY[i] <- NA}
+        if (i > last.no.NA.DOY) {MAXY[i] <- NA}
       }
 
       if (frequency == "daily") {
