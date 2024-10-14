@@ -83,19 +83,19 @@ Phen <-
       stop("Invalid frequency. Must be one of: daily, 8-days, 16-days, bi-weekly or monthly")
     }
     if (frequency == "daily") {
-      nGS <- 365
+      nGS <- 365L
     }
     if (frequency == "8-days") {
-      nGS <- 46
+      nGS <- 46L
     }
     if (frequency == "16-days") {
-      nGS <- 23
+      nGS <- 23L
     }
     if (frequency == "monthly") {
-      nGS <- 12
+      nGS <- 12L
     }
     if (frequency == "bi-monthly") {
-      nGS <- 24
+      nGS <- 24L
     }
     if (all(is.na(x))) {
       return(rep(NA, nGS))
@@ -105,7 +105,7 @@ Phen <-
     }
 
     DOY <- lubridate::yday(dates)
-    DOY[which(DOY == 366)] <- 365
+    DOY[which(DOY == 366)] <- 365L
     D1 <- cbind(DOY, x)
     if (length(unique(D1[, 2])) < 10 | (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1))) {
       return(rep(NA, nGS))
