@@ -123,29 +123,31 @@ Phen <-
     Hmat[1, 2] <- Hmat[2, 1]
     K1 <- ks::kde(na.omit(D1), H = Hmat, xmin = c(1, rge[1]), xmax = c(365, rge[2]), gridsize = c(365, 500))
     K1Con <- K1$estimate
-
-    for (j in 1:365) {
-      Kdiv <- sum(K1$estimate[j, ])
-      ifelse(Kdiv == 0, K1Con[j, ] <- 0, K1Con[j, ] <- K1$estimate[j, ] / sum(K1$estimate[j, ]))
-    }
+    K1Con <- apply(K1$estimate, 1, function(row) {
+      Kdiv <- sum(row)
+      if (Kdiv == 0) {
+        return(rep(0, length(row)))
+      } else {
+        return(row / Kdiv)
+      }
+    })
+    
+    K1Con <- t(K1Con)
     
     first.no.NA.DOY <- min(D1[,1][which(is.na(D1[,2])==FALSE)])
     last.no.NA.DOY <- max(D1[,1][which(is.na(D1[,2])==FALSE)])
 
-    MAXY <- apply(K1Con, 1, max)
-    for (i in 1:365) {
-      n.select <- which(K1Con[i, ] == MAXY[i], arr.ind = TRUE)
+    n.selects <- apply(K1Con, 1, function(row) which(row == max(row)))
+    
+    MAXY <- mapply(function(n.select, i) {
       if (length(n.select) > 1) {
-        n <- n.select[1]
-        MAXY[i] <- NA
+        return(NA)
+      } else if (length(n.select) == 1 && i >= first.no.NA.DOY && i <= last.no.NA.DOY) {
+        return(median(K1$eval.points[[2]][n.select]))
+      } else {
+        return(NA)
       }
-      if (length(n.select) == 1) {
-        n <- n.select
-        MAXY[i] <- median(K1$eval.points[[2]][n])
-      }
-      if (i < first.no.NA.DOY) {MAXY[i] <- NA}
-      if (i > last.no.NA.DOY) {MAXY[i] <- NA}
-    }
+    }, n.select = n.selects, i = 1:365)
 
     if (frequency == "daily") {
       select_DGS <- seq(1, 365, 1)
