@@ -152,15 +152,15 @@ PhenMap <-
       }, n.select = n.selects, i = 1:365)
 
       if (frequency == "daily") {
-        select_DGS <- seq(1, 365, 1)
+        select_DGS <- 1L:365L
         Ref <- MAXY
       }
       if (frequency == "8-days") {
-        select_DGS <- seq(1, 365, 8)
+        select_DGS <- seq(1L, 365L, 8L)
         Ref <- MAXY[select_DGS]
       }
       if (frequency == "16-days") {
-        select_DGS <- seq(1, 365, 16)
+        select_DGS <- seq(1L, 365L, 16L)
         Ref <- MAXY[select_DGS]
       }
       if (frequency == "monthly") {
