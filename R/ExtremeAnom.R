@@ -193,20 +193,17 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
   first.no.NA.DOY <- min(D1[,1][which(is.na(D1[,2])==FALSE)])
   last.no.NA.DOY <- max(D1[,1][which(is.na(D1[,2])==FALSE)])
   
-  MAXY <- apply(K1Con, 1, max)
-  for (i in 1:365) {
-    n.select <- which(K1Con[i, ] == MAXY[i], arr.ind = TRUE)
+  n.selects <- apply(K1Con, 1, function(row) which(row == max(row)))
+  
+  MAXY <- mapply(function(n.select, i) {
     if (length(n.select) > 1) {
-      n <- n.select[1]
-      MAXY[i] <- NA
+      return(NA)
+    } else if (length(n.select) == 1 && i >= first.no.NA.DOY && i <= last.no.NA.DOY) {
+      return(median(K1$eval.points[[2]][n.select]))
+    } else {
+      return(NA)
     }
-    if (length(n.select) == 1) {
-      n <- n.select
-      MAXY[i] <- median(K1$eval.points[[2]][n])
-    }
-    if (i < first.no.NA.DOY) {MAXY[i] <- NA}
-    if (i > last.no.NA.DOY) {MAXY[i] <- NA}
-  }
+  }, n.select = n.selects, i = 1:365)
 
   h2d <- list()
   h2d$x <- seq(1, 365)
