@@ -224,11 +224,7 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
     D2[, 1] <- DOGS[match(D2[, 1], DOGS[, 1]), 2]
   }
 
-  Anoma <- rep(NA, ano.len)
-  for (i in 1:nrow(D2)) {
-    Anoma[i] <- D2[i, 2] - MAXY[D2[i, 1]]
-  }
-  Anoma <- Anoma[1:ano.len]
+  Anoma <- D2[, 2] - MAXY[D2[, 1]]
   names(Anoma) <- paste("anom", dates[ano.min:ano.max], sep = "_")
 
   rowAnom <- matrix(NA, nrow = nrow(D2), ncol = 500)
