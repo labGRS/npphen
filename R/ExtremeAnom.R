@@ -135,7 +135,7 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
   if (all(is.na(x)) & output == "both") {
     return(rep(NA, len2))
   }
-  if (all(is.na(x)) & output %in% c("clean", "anomalies", "rfd")) {
+  if (all(is.na(x)) & output != 'both') {
     return(rep(NA, ano.len))
   }
 
