@@ -172,9 +172,7 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
   }
   DOGS <- cbind(seq(1, 365), c(seq(185, 365), seq(1, 184)))
   if (h == 2) {
-    for (i in 1:nrow(D1)) {
-      D1[i, 1] <- DOGS[which(DOGS[, 1] == D1[i, 1], arr.ind = TRUE), 2]
-    }
+    D1[, 1] <- DOGS[match(D1[, 1], DOGS[, 1]), 2]
   }
 
   Hmat <- ks::Hpi(na.omit(D1))
