@@ -203,7 +203,7 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
     } else {
       return(NA)
     }
-  }, n.select = n.selects, i = 1:365)
+  }, n.select = n.selects, i = 1L:365L)
 
   h2d <- list()
   h2d$x <- 1L:365L

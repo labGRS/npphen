@@ -149,7 +149,7 @@ PhenMap <-
         } else {
           return(NA)
         }
-      }, n.select = n.selects, i = 1:365)
+      }, n.select = n.selects, i = 1L:365L)
 
       if (frequency == "daily") {
         select_DGS <- 1L:365L
