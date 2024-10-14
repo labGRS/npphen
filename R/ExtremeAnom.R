@@ -142,8 +142,7 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
   if ((all(x < rge[1], na.rm = T) & output == "both") | (all(x > rge[2], na.rm = T) & output == "both")) {
     return(rep(NA, len2))
   }
-  if ((all(x < rge[1], na.rm = T) & output %in% c("clean", "anomalies", "rfd")) |
-    (all(x > rge[2], na.rm = T) & output %in% c("clean", "anomalies", "rfd"))) {
+  if ((all(x < rge[1], na.rm = T) & output != 'both') | (all(x > rge[2], na.rm = T) & output != 'both')) {
     return(rep(NA, ano.len))
   }
 
@@ -156,7 +155,7 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
     if (output == "both") {
       return(rep(NA, len2))
     }
-    if (output %in% c("clean", "anomalies", "rfd")) {
+    if (output != 'both') {
       return(rep(NA, ano.len))
     }
   }
@@ -164,7 +163,7 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
   if (all(is.na(D2[, 2])) & output == "both") {
     return(rep(NA, len2))
   }
-  if (all(is.na(D2[, 2])) & output %in% c("clean", "anomalies", "rfd")) {
+  if (all(is.na(D2[, 2])) & output != 'both') {
     return(rep(NA, ano.len))
   }
 
