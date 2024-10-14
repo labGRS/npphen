@@ -117,7 +117,7 @@ PhenMap <-
       DOGS <- cbind(seq(1, 365), c(seq(185, 365), seq(1, 184)))
       if (h == 2) {
         for (i in 1:nrow(D1)) {
-          D1[i, 1] <- DOGS[which(DOGS[, 1] == D1[i, 1], arr.ind = TRUE), 2]
+          D1[, 1] <- DOGS[match(D1[, 1], DOGS[, 1]), 2]
         }
       }
 
@@ -125,11 +125,16 @@ PhenMap <-
       Hmat[1, 2] <- Hmat[2, 1]
       K1 <- ks::kde(na.omit(D1), H = Hmat, xmin = c(1, rge[1]), xmax = c(365, rge[2]), gridsize = c(365, 500))
       K1Con <- K1$estimate
-
-      for (j in 1:365) {
-        Kdiv <- sum(K1$estimate[j, ])
-        ifelse(Kdiv == 0, K1Con[j, ] <- 0, K1Con[j, ] <- K1$estimate[j, ] / sum(K1$estimate[j, ]))
-      }
+      K1Con <- apply(K1$estimate, 1, function(row) {
+        Kdiv <- sum(row)
+        if (Kdiv == 0) {
+          return(rep(0, length(row)))
+        } else {
+          return(row / Kdiv)
+        }
+      })
+      
+      K1Con <- t(K1Con)
 
       first.no.NA.DOY <- min(D1[,1][which(is.na(D1[,2])==FALSE)])
       last.no.NA.DOY <- max(D1[,1][which(is.na(D1[,2])==FALSE)])
