@@ -235,12 +235,8 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
       return(which.min(x)) 
     }
   })
-  AnomRFD <- rep(NA, nrow(D2))
-  for (i in 1:nrow(D2)) {
-    AnomRFD[i] <- h2d$cumDensity[D2[i, 1], rowAnom2[i]]
-  }
-  AnomRFDPerc <- round(100 * (AnomRFD))
-  names(AnomRFDPerc) <- paste("rfd", dates[ano.min:ano.max], sep = "_")
+  AnomRFD <- round(h2d$cumDensity[cbind(D2[, 1], rowAnom2)]*100)
+  names(AnomRFD) <- paste("rfd", dates[ano.min:ano.max], sep = "_")
 
   rfd <- rfd * 100
   if (output == "both") {
