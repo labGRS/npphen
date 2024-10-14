@@ -221,9 +221,7 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
   if(na.end<=365) {h2d$cumDensity[na.end:365,] <- NA}
 
   if (h == 2) {
-    for (i in 1:nrow(D2)) {
-      D2[i, 1] <- DOGS[which(DOGS[, 1] == D2[i, 1], arr.ind = TRUE), 2]
-    }
+    D2[, 1] <- DOGS[match(D2[, 1], DOGS[, 1]), 2]
   }
 
   Anoma <- rep(NA, ano.len)
