@@ -240,13 +240,13 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
 
   rfd <- rfd * 100
   if (output == "both") {
-    out_data <- c(Anoma, AnomRFDPerc)
+    out_data <- c(Anoma, AnomRFD)
   }
   if (output == "anomalies") {
     out_data <- Anoma
   }
   if (output == "rfd") {
-    out_data <- AnomRFDPerc
+    out_data <- AnomRFD
   }
   if (output == "clean") {
     if (rfd == 0) {
