@@ -253,11 +253,9 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
       stop("For output = clean, rfd should be a value between 0 - 0.99")
     }
 
-    p <- which(AnomRFDPerc >= rfd | is.na(AnomRFDPerc))
+    p <- which(AnomRFD >= rfd | is.na(AnomRFD))
     aa <- rep(NA, ano.len)
-    for (i in p) {
-      aa[i] <- Anoma[i]
-    }
+    aa[AnomRFD >= rfd | is.na(AnomRFD)] <- Anoma[AnomRFD >= rfd | is.na(AnomRFD)]
     names(aa) <- dates[ano.min:ano.max]
 
     out_data <- aa
