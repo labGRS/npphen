@@ -119,7 +119,7 @@ ExtremeAnoMap <-
         if (output == "both") {
           return(rep(NA, len2))
         }
-        if (output %in% c("clean", "anomalies", "rfd")) {
+        if (output != 'both') {
           return(rep(NA, ano.len))
         }
       }
@@ -127,7 +127,7 @@ ExtremeAnoMap <-
       if (all(is.na(D2[, 2])) & output == "both") {
         return(rep(NA, len2))
       }
-      if (all(is.na(D2[, 2])) & output %in% c("clean", "anomalies", "rfd")) {
+      if (all(is.na(D2[, 2])) & output != 'both') {
         return(rep(NA, ano.len))
       }
 
