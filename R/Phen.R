@@ -82,21 +82,10 @@ Phen <-
     if (is.na(freq.method)) {
       stop("Invalid frequency. Must be one of: daily, 8-days, 16-days, bi-weekly or monthly")
     }
-    if (frequency == "daily") {
-      nGS <- 365L
-    }
-    if (frequency == "8-days") {
-      nGS <- 46L
-    }
-    if (frequency == "16-days") {
-      nGS <- 23L
-    }
-    if (frequency == "monthly") {
-      nGS <- 12L
-    }
-    if (frequency == "bi-monthly") {
-      nGS <- 24L
-    }
+    nGS <- switch(frequency,
+                  "daily" = 365L, "8-days" = 46L, "16-days" = 23L,
+                  "monthly" = 12L, "bi-monthly" = 24L)
+    
     if (all(is.na(x))) {
       return(rep(NA, nGS))
     }
@@ -149,34 +138,18 @@ Phen <-
       }
     }, n.select = n.selects, i = 1L:365L)
 
-    if (frequency == "daily") {
-      select_DGS <- 1L:365
-      Ref <- MAXY
-    }
-    if (frequency == "8-days") {
-      select_DGS <- seq(1L, 365L, 8L)
-      Ref <- MAXY[select_DGS]
-    }
-    if (frequency == "16-days") {
-      select_DGS <- seq(1L, 365L, 16L)
-      Ref <- MAXY[select_DGS]
-    }
-    if (frequency == "monthly") {
-      select_DGS <- c(15, 46, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349)
-      Ref <- MAXY[select_DGS]
-    }
-    if (frequency == "bi-weekly") {
-      select_DGS <- c(1, 15, 32, 46, 60, 74, 91, 105, 121, 135, 152, 166, 182, 196, 213, 227, 244, 258, 274, 288, 305, 319, 335, 349)
-      Ref <- MAXY[select_DGS]
-    }
-    if (h == 1) {
-      id.label <- "DOY"
-    }
-    if (h == 2) {
-      id.label <- "DGS"
-    }
+    select_DGS <- switch(frequency,
+                         "daily" = 1L:365,
+                         "8-days" = seq(1L, 365L, 8L),
+                         "16-days" = seq(1L, 365L, 16L),
+                         "monthly" = c(15, 46, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349),
+                         "bi-weekly" = c(1, 15, 32, 46, 60, 74, 91, 105, 121, 135, 152, 166, 182, 196, 213, 227, 244, 258, 274, 288, 305, 319, 335, 349))
+    
+    Ref <- MAXY[select_DGS]
+    
+
     if (isTRUE(plot)) {
-      plot(select_DGS, Ref, xlab = id.label, ylab = "VI", font.lab = 2, type = "l")
+      plot(select_DGS, Ref, xlab = ifelse(h == 1, "DOY", "DGS"), ylab = "VI", font.lab = 2, type = "l")
       axis(1, at = seq(0, 365, 50))
     }
 
