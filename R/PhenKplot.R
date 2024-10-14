@@ -74,7 +74,7 @@ PhenKplot <-
       stop("N of dates and files do not match")
     }
 
-    nGS <- 365
+    nGS <- 365L
 
     if (all(is.na(x))) {
       stop("Vector with only NA's. Please check your input data")
@@ -85,7 +85,7 @@ PhenKplot <-
     }
 
     DOY <- lubridate::yday(dates)
-    DOY[which(DOY == 366)] <- 365
+    DOY[which(DOY == 366)] <- 365L
     D1 <- cbind(DOY, x)
     if (length(unique(D1[, 2])) < 10 | (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1))) {
       return(rep(NA, nGS))
@@ -130,7 +130,7 @@ PhenKplot <-
     }
 
     h2d <- list()
-    h2d$x <- seq(1, 365)
+    h2d$x <- 1L:365L
     h2d$y <- seq(rge[1], rge[2], len = 500)
     h2d$density <- K1Con / sum(K1Con)
     uniqueVals <- rev(unique(sort(h2d$density)))
