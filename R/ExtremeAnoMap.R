@@ -186,34 +186,23 @@ ExtremeAnoMap <-
       
       if (h == 2) {
         for (i in 1:nrow(D2)) {
-          D2[i, 1] <- DOGS[which(DOGS[, 1] == D2[i, 1], arr.ind = TRUE), 2]
+          D2[, 1] <- DOGS[match(D2[, 1], DOGS[, 1]), 2]
         }
       }
 
-      Anoma <- rep(NA, ano.len)
-      for (i in 1:nrow(D2)) {
-        Anoma[i] <- D2[i, 2] - MAXY[D2[i, 1]]
-      }
-      Anoma <- Anoma[1:ano.len]
+      Anoma <- D2[, 2] - MAXY[D2[, 1]]
       names(Anoma) <- paste("anom", dates[ano.min:ano.max], sep = "_")
 
-      rowAnom <- matrix(NA, nrow = nrow(D2), ncol = 500)
-      for (i in 1:nrow(D2)) {
-        rowAnom[i, ] <- abs(h2d$y - D2[i, 2])
-      }
-      rowAnom2 <- unlist(apply(rowAnom, 1, function(x) {
+      rowAnom <- abs(outer(D2[, 2], h2d$y, "-"))
+      rowAnom2 <- apply(rowAnom_v2, 1, function(x) {
         if (all(is.na(x))) {
-          NA
+          return(NA) 
         } else {
-          which.min(x)
+          return(which.min(x)) 
         }
-      }))
-      AnomRFD <- rep(NA, nrow(D2))
-      for (i in 1:nrow(D2)) {
-        AnomRFD[i] <- h2d$cumDensity[D2[i, 1], rowAnom2[i]]
-      }
-      AnomRFDPerc <- round(100 * (AnomRFD))
-      names(AnomRFDPerc) <- paste("rfd", dates[ano.min:ano.max], sep = "_")
+      })
+      AnomRFD <- round(h2d$cumDensity[cbind(D2[, 1], rowAnom2)]*100)
+      names(AnomRFD) <- paste("rfd", dates[ano.min:ano.max], sep = "_")
 
       rfd <- rfd * 100
       if (output == "both") {
@@ -230,11 +219,9 @@ ExtremeAnoMap <-
           stop("For output = clean, rfd should be a value between 0 - 0.99")
         }
 
-        p <- which(AnomRFDPerc >= rfd | is.na(AnomRFDPerc))
+        p <- which(AnomRFD >= rfd | is.na(AnomRFD))
         aa <- rep(NA, ano.len)
-        for (i in p) {
-          aa[i] <- Anoma[i]
-        }
+        aa[AnomRFD >= rfd | is.na(AnomRFD)] <- Anoma[AnomRFD >= rfd | is.na(AnomRFD)]
         names(aa) <- dates[ano.min:ano.max]
 
         out_data <- aa
