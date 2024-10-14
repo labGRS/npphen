@@ -133,13 +133,13 @@ PhenKplot <-
 
     h2d <- list()
     h2d$x <- 1L:365L
-    h2d$y <- seq(rge[1], rge[2], len = 500)
-    h2d$density <- K1Con / sum(K1Con)
+    h2d$y <- seq(rge[1], rge[2], length.out = 500)
+    total_density <- sum(K1Con)
+    h2d$density <- K1Con / total_density
     uniqueVals <- rev(unique(sort(h2d$density)))
     cumRFDs <- cumsum(uniqueVals)
-    names(cumRFDs) <- uniqueVals
-    h2d$cumDensity <- matrix(nrow = nrow(h2d$density), ncol = ncol(h2d$density))
-    h2d$cumDensity[] <- cumRFDs[as.character(h2d$density)]
+    density_indices <- match(h2d$density, uniqueVals)
+    h2d$cumDensity <- matrix(cumRFDs[density_indices], nrow = nrow(h2d$density), ncol = ncol(h2d$density))
     
     na.sta <- first.no.NA.DOY-1
     na.end <- last.no.NA.DOY+1
