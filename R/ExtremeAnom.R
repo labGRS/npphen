@@ -227,17 +227,14 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
   Anoma <- D2[, 2] - MAXY[D2[, 1]]
   names(Anoma) <- paste("anom", dates[ano.min:ano.max], sep = "_")
 
-  rowAnom <- matrix(NA, nrow = nrow(D2), ncol = 500)
-  for (i in 1:nrow(D2)) {
-    rowAnom[i, ] <- abs(h2d$y - D2[i, 2])
-  }
-  rowAnom2 <- unlist(apply(rowAnom, 1, function(x) {
+  rowAnom <- abs(outer(D2[, 2], h2d$y, "-"))
+  rowAnom2 <- apply(rowAnom_v2, 1, function(x) {
     if (all(is.na(x))) {
-      NA
+      return(NA) 
     } else {
-      which.min(x)
+      return(which.min(x)) 
     }
-  }))
+  })
   AnomRFD <- rep(NA, nrow(D2))
   for (i in 1:nrow(D2)) {
     AnomRFD[i] <- h2d$cumDensity[D2[i, 1], rowAnom2[i]]
