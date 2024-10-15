@@ -194,7 +194,7 @@ ExtremeAnoMap <-
       names(Anoma) <- paste("anom", dates[ano.min:ano.max], sep = "_")
 
       rowAnom <- abs(outer(D2[, 2], h2d$y, "-"))
-      rowAnom2 <- apply(rowAnom_v2, 1, function(x) {
+      rowAnom2 <- apply(rowAnom, 1, function(x) {
         if (all(is.na(x))) {
           return(NA) 
         } else {
