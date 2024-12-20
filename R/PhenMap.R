@@ -88,7 +88,7 @@ PhenMap <-
       if (all(is.na(x))) {
         return(rep(NA, nGS))
       }
-      if (all(x < rge[1]) | all(x > rge[2], na.rm = T)) {
+      if (all(x < rge[1], na.rm = T) | all(x > rge[2], na.rm = T)) {
         return(rep(NA, nGS))
       }
 

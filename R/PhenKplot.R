@@ -80,7 +80,7 @@ PhenKplot <-
       stop("Vector with only NA's. Please check your input data")
     }
 
-    if (all(x < rge[1]) | all(x > rge[2], na.rm = T)) {
+    if (all(x < rge[1], na.rm = T) | all(x > rge[2], na.rm = T)) {
       stop("Inconsistency between rge and x. Please check your input data")
     }
 
