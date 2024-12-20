@@ -83,8 +83,12 @@ PhenMap <-
         stop("Invalid frequency. Must be one of: daily, 8-days, 16-days, bi-weekly or monthly")
       }
       nGS <- switch(frequency,
-                    "daily" = 365L, "8-days" = 46L, "16-days" = 23L,
-                    "monthly" = 12L, "bi-monthly" = 24L)
+        "daily" = 365L,
+        "8-days" = 46L,
+        "16-days" = 23L,
+        "monthly" = 12L,
+        "bi-monthly" = 24L
+      )
       if (all(is.na(x))) {
         return(rep(NA, nGS))
       }
@@ -121,14 +125,14 @@ PhenMap <-
           return(row / Kdiv)
         }
       })
-      
+
       K1Con <- t(K1Con)
 
-      first.no.NA.DOY <- min(D1[,1][which(is.na(D1[,2])==FALSE)])
-      last.no.NA.DOY <- max(D1[,1][which(is.na(D1[,2])==FALSE)])
-      
+      first.no.NA.DOY <- min(D1[, 1][which(is.na(D1[, 2]) == FALSE)])
+      last.no.NA.DOY <- max(D1[, 1][which(is.na(D1[, 2]) == FALSE)])
+
       n.selects <- apply(K1Con, 1, function(row) which(row == max(row)))
-      
+
       MAXY <- mapply(function(n.select, i) {
         if (length(n.select) > 1) {
           return(NA)
@@ -140,12 +144,13 @@ PhenMap <-
       }, n.select = n.selects, i = 1L:365L)
 
       select_DGS <- switch(frequency,
-                           "daily" = 1L:365,
-                           "8-days" = seq(1L, 365L, 8L),
-                           "16-days" = seq(1L, 365L, 16L),
-                           "monthly" = c(15, 46, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349),
-                           "bi-weekly" = c(1, 15, 32, 46, 60, 74, 91, 105, 121, 135, 152, 166, 182, 196, 213, 227, 244, 258, 274, 288, 305, 319, 335, 349))
-      
+        "daily" = 1L:365,
+        "8-days" = seq(1L, 365L, 8L),
+        "16-days" = seq(1L, 365L, 16L),
+        "monthly" = c(15, 46, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349),
+        "bi-weekly" = c(1, 15, 32, 46, 60, 74, 91, 105, 121, 135, 152, 166, 182, 196, 213, 227, 244, 258, 274, 288, 305, 319, 335, 349)
+      )
+
       Ref <- MAXY[select_DGS]
 
       names(Ref) <- select_DGS
