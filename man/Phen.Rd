@@ -8,7 +8,7 @@
 Phen(x, dates, h, frequency = "16-days", rge, plot = T)
 }
 \arguments{
-\item{x}{Numeric vector. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input values if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000}
+\item{x}{Numeric vector. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input values if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000).}
 
 \item{dates}{A date vector. The number of dates must be equal to the number of "x" values (numeric input vector).}
 
