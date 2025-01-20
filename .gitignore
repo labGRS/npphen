@@ -3,5 +3,8 @@
 .RData
 .Ruserdata
 docs
+npphen.Rproj
 Rprof.out
 phen_MD.tif
+anomRFD_MD1.tif
+anomRFD_MD2.tif
