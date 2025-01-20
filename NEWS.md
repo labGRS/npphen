@@ -1,3 +1,9 @@
+npphen 2.1.1
+===========
+
+* Vectorize portions of the code for speed improve
+* Fix minor bugs
+
 npphen 2.0.0
 ===========
 

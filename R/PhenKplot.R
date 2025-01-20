@@ -31,18 +31,20 @@
 #' # Dates
 #' data("modis_dates")
 #'
-#' # Generate a Raster time series from a particular pixel 
+#' # Generate a Raster time series from a particular pixel
 #' # using a SpatRaster and a date for Central Chile
 #' md_pixel <- cellFromXY(MegaDrought, cbind(313395, 6356610))
 #' md_pixelts <- as.numeric(MegaDrought[md_pixel])
 #' plot(modis_dates, md_pixelts, type = "l")
 #'
 #' # Variability of the annual phenology for the given pixel
-#' PhenKplot(x = md_pixelts, dates = modis_dates,
-#' h = 2, xlab = "DGS", ylab = "NDVI", rge = c(0, 10000))
+#' PhenKplot(
+#'   x = md_pixelts, dates = modis_dates,
+#'   h = 2, xlab = "DGS", ylab = "NDVI", rge = c(0, 10000)
+#' )
 #'
 #'
-#' ## Testing with the Bdesert_spatRast from 
+#' ## Testing with the Bdesert_spatRast from
 #' ## the Atacama Desert, Northern Chile (NDVI), h=2 ##
 #'
 #' # Load data
@@ -50,15 +52,17 @@
 #' f <- system.file("extdata/Bdesert_spatRast.rda", package = "npphen")
 #' Bdesert <- readRDS(f)
 #'
-#' # Generate a Raster time series from a particular pixel 
+#' # Generate a Raster time series from a particular pixel
 #' # using a SpatRaster and a date for Northern Chile
 #' bd_pixel <- cellFromXY(Bdesert, cbind(286638, 6852107))
 #' bd_pixelts <- as.numeric(Bdesert[bd_pixel])
 #' plot(modis_dates, bd_pixelts, type = "l")
 #'
 #' # Variability of the annual phenology for the given pixel
-#' PhenKplot(x = bd_pixelts, dates = modis_dates, 
-#' h = 2, xlab = "DGS", ylab = "NDVI", rge = c(0, 10000))
+#' PhenKplot(
+#'   x = bd_pixelts, dates = modis_dates,
+#'   h = 2, xlab = "DGS", ylab = "NDVI", rge = c(0, 10000)
+#' )
 #' }
 #' @export
 
@@ -80,7 +84,7 @@ PhenKplot <-
       stop("Vector with only NA's. Please check your input data")
     }
 
-    if (all(x < rge[1]) | all(x > rge[2], na.rm = T)) {
+    if (all(x < rge[1], na.rm = T) | all(x > rge[2], na.rm = T)) {
       stop("Inconsistency between rge and x. Please check your input data")
     }
 
@@ -113,14 +117,14 @@ PhenKplot <-
         return(row / Kdiv)
       }
     })
-    
+
     K1Con <- t(K1Con)
-    
-    first.no.NA.DOY <- min(D1[,1][which(is.na(D1[,2])==FALSE)])
-    last.no.NA.DOY <- max(D1[,1][which(is.na(D1[,2])==FALSE)])
+
+    first.no.NA.DOY <- min(D1[, 1][which(is.na(D1[, 2]) == FALSE)])
+    last.no.NA.DOY <- max(D1[, 1][which(is.na(D1[, 2]) == FALSE)])
 
     n.selects <- apply(K1Con, 1, function(row) which(row == max(row)))
-    
+
     MAXY <- mapply(function(n.select, i) {
       if (length(n.select) > 1) {
         return(NA)
@@ -140,11 +144,15 @@ PhenKplot <-
     cumRFDs <- cumsum(uniqueVals)
     density_indices <- match(h2d$density, uniqueVals)
     h2d$cumDensity <- matrix(cumRFDs[density_indices], nrow = nrow(h2d$density), ncol = ncol(h2d$density))
-    
-    na.sta <- first.no.NA.DOY-1
-    na.end <- last.no.NA.DOY+1
-    if(na.sta>=1) {h2d$cumDensity[1:na.sta,] <- NA}
-    if(na.end<=365) {h2d$cumDensity[na.end:365,] <- NA}
+
+    na.sta <- first.no.NA.DOY - 1
+    na.end <- last.no.NA.DOY + 1
+    if (na.sta >= 1) {
+      h2d$cumDensity[1:na.sta, ] <- NA
+    }
+    if (na.end <= 365) {
+      h2d$cumDensity[na.end:365, ] <- NA
+    }
 
     image(h2d$x, h2d$y, h2d$cumDensity, xlab = xlab, ylab = ylab, font.lab = 2, breaks = c(0, 0.5, 0.75, 0.9, 0.95), col = grDevices::heat.colors(n = 4, alpha = 0.6))
     contour(h2d$x, h2d$y, h2d$cumDensity, levels = c(0, 0.5, 0.75, 0.9, 0.95), add = T, col = grDevices::grey(0.25), labcex = 1)

@@ -99,14 +99,14 @@ ExtremeAnoMap <-
       if (all(is.na(x)) & output == "both") {
         return(rep(NA, len2))
       }
-      if (all(is.na(x)) & output != 'both') {
+      if (all(is.na(x)) & output != "both") {
         return(rep(NA, ano.len))
       }
-      
+
       if ((all(x < rge[1], na.rm = T) & output == "both") | (all(x > rge[2], na.rm = T) & output == "both")) {
         return(rep(NA, len2))
       }
-      if ((all(x < rge[1], na.rm = T) & output != 'both') | (all(x > rge[2], na.rm = T) & output != 'both')) {
+      if ((all(x < rge[1], na.rm = T) & output != "both") | (all(x > rge[2], na.rm = T) & output != "both")) {
         return(rep(NA, ano.len))
       }
 
@@ -119,7 +119,7 @@ ExtremeAnoMap <-
         if (output == "both") {
           return(rep(NA, len2))
         }
-        if (output != 'both') {
+        if (output != "both") {
           return(rep(NA, ano.len))
         }
       }
@@ -127,7 +127,7 @@ ExtremeAnoMap <-
       if (all(is.na(D2[, 2])) & output == "both") {
         return(rep(NA, len2))
       }
-      if (all(is.na(D2[, 2])) & output != 'both') {
+      if (all(is.na(D2[, 2])) & output != "both") {
         return(rep(NA, ano.len))
       }
 
@@ -151,14 +151,14 @@ ExtremeAnoMap <-
           return(row / Kdiv)
         }
       })
-      
+
       K1Con <- t(K1Con)
-      
-      first.no.NA.DOY <- min(D1[,1][which(is.na(D1[,2])==FALSE)])
-      last.no.NA.DOY <- max(D1[,1][which(is.na(D1[,2])==FALSE)])
-      
+
+      first.no.NA.DOY <- min(D1[, 1][which(is.na(D1[, 2]) == FALSE)])
+      last.no.NA.DOY <- max(D1[, 1][which(is.na(D1[, 2]) == FALSE)])
+
       n.selects <- apply(K1Con, 1, function(row) which(row == max(row)))
-      
+
       MAXY <- mapply(function(n.select, i) {
         if (length(n.select) > 1) {
           return(NA)
@@ -179,11 +179,15 @@ ExtremeAnoMap <-
       density_indices <- match(h2d$density, uniqueVals)
       h2d$cumDensity <- matrix(cumRFDs[density_indices], nrow = nrow(h2d$density), ncol = ncol(h2d$density))
 
-      na.sta <- first.no.NA.DOY-1
-      na.end <- last.no.NA.DOY+1
-      if(na.sta>=1) {h2d$cumDensity[1:na.sta,] <- NA}
-      if(na.end<=365) {h2d$cumDensity[na.end:365,] <- NA}
-      
+      na.sta <- first.no.NA.DOY - 1
+      na.end <- last.no.NA.DOY + 1
+      if (na.sta >= 1) {
+        h2d$cumDensity[1:na.sta, ] <- NA
+      }
+      if (na.end <= 365) {
+        h2d$cumDensity[na.end:365, ] <- NA
+      }
+
       if (h == 2) {
         for (i in 1:nrow(D2)) {
           D2[, 1] <- DOGS[match(D2[, 1], DOGS[, 1]), 2]
@@ -196,12 +200,12 @@ ExtremeAnoMap <-
       rowAnom <- abs(outer(D2[, 2], h2d$y, "-"))
       rowAnom2 <- apply(rowAnom, 1, function(x) {
         if (all(is.na(x))) {
-          return(NA) 
+          return(NA)
         } else {
-          return(which.min(x)) 
+          return(which.min(x))
         }
       })
-      AnomRFD <- round(h2d$cumDensity[cbind(D2[, 1], rowAnom2)]*100)
+      AnomRFD <- round(h2d$cumDensity[cbind(D2[, 1], rowAnom2)] * 100)
       names(AnomRFD) <- paste("rfd", dates[ano.min:ano.max], sep = "_")
 
       rfd <- rfd * 100
