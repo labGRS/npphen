@@ -244,6 +244,7 @@ rfd_nstage_300_ls <- list.files(path = inpath_rfd, pattern = glob2rx('*nstage1.t
 anom_rfd_300_vec <- rast(anom_vec_300_ls)
 anom_rfd_300_nstage1 <- rast(anom_nstage_300_ls)
 
+
 ### diff anom ------
 difference <- function(x, y){
   if(all(is.na(x)) | all(is.na(y))){
@@ -293,3 +294,9 @@ mean_diff <- diff_rfd_300 %>% mean(na.rm = T)
 sd_diff <- diff_rfd_300 %>% app(fun = sd, na.rm = T) 
 
 writeRaster(c(mean_diff, sd_diff), 'resolution_test/02_campana_resampled/02e_diff_comparison/rfdFunction_diff_compare_300.tif', datatype = 'INT2S', overwrite = T)
+
+### rmse -----
+rmse_anom <- sqrt(mean((abs(anom_rfd_300_nstage1) - abs(anom_rfd_300_vec))^2, na.rm = TRUE))
+rmse_rfd <- sqrt(mean((rfd_300_nstage1 - rfd_300_vec)^2, na.rm = TRUE))
+
+writeRaster(c(rmse_anom, rmse_rfd), 'resolution_test/02_campana_resampled/02e_diff_comparison/anomRFD_Function_rmse_compare_300.tif', datatype = 'INT2S', overwrite = T)
