@@ -163,11 +163,11 @@ plot(evi_spat[[1:4]])
 
 ### Setup ------
 nc1 <- 3
-refp_end <- which(all_dates <= '2010-06-30') %>% tail(1)
-anop_end <- length(all_dates)
+refp_end <- which(modis_dates <= '2010-06-30') %>% tail(1)
+anop_end <- length(modis_dates)
 
-outname_npphen <- paste0('resolution_test/02_campana_resampled/trash/anomRFD_campana_2000_2023_res_', res, 'm.tif')
-outname_nstage1 <- paste0('resolution_test/02_campana_resampled/trash/anomRFD_campana_2000_2023_res_', res, 'm_nstage1.tif')
+outname_npphen <- paste0('resolution_test/02_campana_resampled/trash/anomRFD_campana_2000_2023_res_', res, 'm_bm.tif')
+outname_nstage1 <- paste0('resolution_test/02_campana_resampled/trash/anomRFD_campana_2000_2023_res_', res, 'm_nstage1_bm.tif')
 
 tic('ExtremeAnom original flavour')
 ExtremeAnoMap(
@@ -179,11 +179,26 @@ toc()
 
 tic('ExtremeAnom nstage1')
 ExtremeAnoMap_nstage1(
-  s = evi_spat, dates = all_dates, h = 2, refp = c(1:refp_end),
+  s = MegaDrought, dates = modis_dates, h = 2, refp = c(1:refp_end),
   anop = c(1:anop_end), rfd = 0.9, output = "both", nCluster = nc1, outname = outname_nstage1,
   datatype = "INT2S", rge = c(0, 10000)
 )
 toc()
+
+benchmark_multiple <- microbenchmark(
+  ExAnom_vec = ExtremeAnoMap(
+    s = MegaDrought, dates = modis_dates, h = 2, refp = c(1:refp_end),
+    anop = c(1:anop_end), rfd = 0.9, output = "both", nCluster = nc1, outname = outname_npphen,
+    datatype = "INT2S", rge = c(0, 10000)
+  ),
+  ExAnom_nstage1 = ExtremeAnoMap_nstage1(
+    s = evi_spat, dates = all_dates, h = 2, refp = c(1:refp_end),
+    anop = c(1:anop_end), rfd = 0.9, output = "both", nCluster = nc1, outname = outname_nstage1,
+    datatype = "INT2S", rge = c(0, 10000)
+  ), times = 10
+)
+
+autoplot(benchmark_multiple)
 
 ### 30 meters -----
 rm(list = ls(all = T));gc()
