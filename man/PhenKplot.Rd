@@ -8,17 +8,17 @@
 PhenKplot(x, dates, h, xlab, ylab, rge)
 }
 \arguments{
-\item{x}{Numeric vector. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input values if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000)}
+\item{x}{Numeric vector. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input values if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000).}
 
 \item{dates}{A date vector. The number of dates must be equal to the number of "x" values (numeric input vector).}
 
-\item{h}{Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h = 1 if the vegetation is in the Northern Hemisphere (season starting on January 1st), h = 2 if it is in the Southern Hemisphere (season starting on July 1st)}
+\item{h}{Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h = 1 if the vegetation is in the Northern Hemisphere (season starting on January 1st), h = 2 if it is in the Southern Hemisphere (season starting on July 1st).}
 
-\item{xlab}{Character vector (or expression) giving plot title in x axis label (e.g. xlab = "day of the growing season")}
+\item{xlab}{Character vector (or expression) giving plot title in x axis label (e.g. xlab = "day of the growing season").}
 
-\item{ylab}{Character vector (or expression) giving plot title in y axis label (e.g. ylab = "NDVI")}
+\item{ylab}{Character vector (or expression) giving plot title in y axis label (e.g. ylab = "NDVI").}
 
-\item{rge}{Numeric vector with the minimum and maximum values of the vegetation index (e.g. NDVI) used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge = c(0,10000)}
+\item{rge}{Numeric vector with the minimum and maximum values of the vegetation index (e.g. NDVI) used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge = c(0,10000).}
 }
 \description{
 Plot the most probable vegetation greenness values.

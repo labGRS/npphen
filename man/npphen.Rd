@@ -3,11 +3,11 @@
 \docType{package}
 \encoding{UTF-8}
 \name{npphen}
-\alias{npphen}
 \alias{npphen-package}
+\alias{npphen}
 \title{npphen}
 \description{
-The functions in this package estimate the expected annual phenological cycle from time series or raster stack of vegetation (greenness) indexes. The algorithm to estimate the annual phenological cycle (used by the functions in npphen) uses a bivariate kernel density estimator in the index-time space. In this space, the x-axis corresponds to days of the growing season (1-365) and the y-axis to the vegetation index values, which range's values are set using the rge argument (see each function's vignette for details). The expected value of the index for each day of the growing season (the expected phenology) is approximated by the maximum value of the kernel at that day. Anomalies are calculated as deviations from the expected values at given days. The package implements basic and high-level functions for manipulating vector data (numerical series) and raster data (satellite derived products). Processing of very large raster files is supported. For methodological details of kernel density estimation see Wand & Jones (1994).
+The functions in this package estimate the expected annual phenological cycle from time series or SpatRaster of vegetation (greenness) indexes. The algorithm to estimate the annual phenological cycle (used by the functions in npphen) uses a bivariate kernel density estimator in the index-time space. In this space, the x-axis corresponds to days of the growing season (1-365) and the y-axis to the vegetation index values, which range's values are set using the rge argument (see each function's vignette for details). The expected value of the index for each day of the growing season (the expected phenology) is approximated by the maximum value of the kernel at that day. Anomalies are calculated as deviations from the expected values at given days. The package implements basic and high-level functions for manipulating vector data (numerical series) and raster data (satellite derived products). Processing of very large raster files is supported. For methodological details of kernel density estimation see Wand & Jones (1994).
 }
 \references{
 Wand, M.P. & Jones, M.C. (1994) Kernel smoothing. Crc Press.
