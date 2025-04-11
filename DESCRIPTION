@@ -30,6 +30,7 @@ LazyData: true
 Authors@R: c(
 	person("Roberto O.", "Chávez", role="aut", comment=c(ORCID="0000-0001-6782-3579")),			
     person("Sergio A.", "Estay", role="aut", comment=c(ORCID="0000-0002-3797-8964")),
-    person("José A.", "Lastra", role=c("cre","ctb"),comment=c(ORCID="0000-0002-6159-2201")),
+    person("José A.", "Lastra", role=c("cre","ctb"),
+    email = "jose.lastra@pucv.cl", comment=c(ORCID="0000-0002-6159-2201")),
     person("Carlos G.", "Riquelme", role="ctb", comment=c(ORCID="0000-0003-4861-8355"))
     )
