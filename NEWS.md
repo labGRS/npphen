@@ -1,3 +1,10 @@
+npphen 2.0.1
+===========
+
+* Fix minor bugs
+* Fix warnings and notes from CRAN
+
+
 npphen 2.0.0
 ===========
 
