@@ -6,3 +6,5 @@ docs
 npphen.Rproj
 Rplots.pdf
 RScript_testing
+resolution_test/
+*.out
