@@ -9,3 +9,4 @@ RScript_testing
 resolution_test/
 *.out
 npphen.Rcheck/
+*.tar.gz
