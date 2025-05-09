@@ -84,14 +84,14 @@ PhenKplot <-
       stop("Vector with only NA's. Please check your input data")
     }
 
-    if (all(x < rge[1], na.rm = T) | all(x > rge[2], na.rm = T)) {
+    if (all(x < rge[1], na.rm = T) || all(x > rge[2], na.rm = T)) {
       stop("Inconsistency between rge and x. Please check your input data")
     }
 
     DOY <- lubridate::yday(dates)
     DOY[which(DOY == 366)] <- 365L
     D1 <- cbind(DOY, x)
-    if (length(unique(D1[, 2])) < 10 | (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1))) {
+    if (length(unique(D1[, 2])) < 10 || (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1))) {
       return(rep(NA, nGS))
     }
 
@@ -100,9 +100,7 @@ PhenKplot <-
     }
     DOGS <- cbind(seq(1, 365), c(seq(185, 365), seq(1, 184)))
     if (h == 2) {
-      for (i in 1:nrow(D1)) {
-        D1[, 1] <- DOGS[match(D1[, 1], DOGS[, 1]), 2]
-      }
+      D1[, 1] <- DOGS[match(D1[, 1], DOGS[, 1]), 2]
     }
 
     Hmat <- ks::Hpi(na.omit(D1))
