@@ -170,7 +170,7 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
   if (h != 1 && h != 2) {
     stop("Invalid h")
   }
-  DOGS <- cbind(seq(1, 365), c(seq(185, 365), seq(1, 184)))
+  DOGS <- cbind(seq(1, 365), c(seq(181, 365), seq(1, 180)))
   if (h == 2) {
     D1[, 1] <- DOGS[match(D1[, 1], DOGS[, 1]), 2]
   }
