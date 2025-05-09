@@ -93,14 +93,14 @@ Phen <-
     if (all(is.na(x))) {
       return(rep(NA, nGS))
     }
-    if (all(x < rge[1], na.rm = T) | all(x > rge[2], na.rm = T)) {
+    if (all(x < rge[1], na.rm = T) || all(x > rge[2], na.rm = T)) {
       return(rep(NA, nGS))
     }
 
     DOY <- lubridate::yday(dates)
     DOY[which(DOY == 366)] <- 365L
     D1 <- cbind(DOY, x)
-    if (length(unique(D1[, 2])) < 10 | (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1))) {
+    if (length(unique(D1[, 2])) < 10 || (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1))) {
       return(rep(NA, nGS))
     }
 
