@@ -112,7 +112,7 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
   if (length(dates) != length(x)) {
     stop("N of dates and files do not match")
   }
-  if (length(x) < length(refp) | length(x) < length(anop)) {
+  if (length(x) < length(refp) || length(x) < length(anop)) {
     stop("Inconsistent anop or refp. Arguments refp and anop can't be grater than length(x)")
   }
   output.method <- match(output, c("both", "anomalies", "rfd", "clean"))
@@ -128,21 +128,21 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
   ano.len <- ano.max - ano.min + 1
   len2 <- 2 * ano.len
 
-  if (ref.min >= ref.max | ano.min > ano.max) {
+  if (ref.min >= ref.max || ano.min > ano.max) {
     stop("for refp or anop, lower value > upper value")
   }
 
-  if (all(is.na(x)) & output == "both") {
+  if (all(is.na(x)) && output == "both") {
     return(rep(NA, len2))
   }
-  if (all(is.na(x)) & output != "both") {
+  if (all(is.na(x)) && output != "both") {
     return(rep(NA, ano.len))
   }
 
-  if ((all(x < rge[1], na.rm = T) & output == "both") | (all(x > rge[2], na.rm = T) & output == "both")) {
+  if ((all(x < rge[1], na.rm = T) & output == "both") || (all(x > rge[2], na.rm = T) & output == "both")) {
     return(rep(NA, len2))
   }
-  if ((all(x < rge[1], na.rm = T) & output != "both") | (all(x > rge[2], na.rm = T) & output != "both")) {
+  if ((all(x < rge[1], na.rm = T) & output != "both") || (all(x > rge[2], na.rm = T) & output != "both")) {
     return(rep(NA, ano.len))
   }
 
@@ -151,7 +151,7 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
   D1 <- cbind(DOY[ref.min:ref.max], x[ref.min:ref.max])
   D2 <- cbind(DOY[ano.min:ano.max], x[ano.min:ano.max])
 
-  if (length(unique(D1[, 2])) < 10 | (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1))) {
+  if (length(unique(D1[, 2])) < 10 || (nrow(D1) - sum(is.na(D1))) < (0.1 * nrow(D1))) {
     if (output == "both") {
       return(rep(NA, len2))
     }
@@ -160,10 +160,10 @@ ExtremeAnom <- function(x, dates, h, refp, anop, rge, output = "both", rfd = 0.9
     }
   }
 
-  if (all(is.na(D2[, 2])) & output == "both") {
+  if (all(is.na(D2[, 2])) && output == "both") {
     return(rep(NA, len2))
   }
-  if (all(is.na(D2[, 2])) & output != "both") {
+  if (all(is.na(D2[, 2])) && output != "both") {
     return(rep(NA, ano.len))
   }
 
