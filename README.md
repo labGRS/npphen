@@ -1,4 +1,4 @@
-# npphen <img src="man/figures/npphen_logo.png" align="right" height=150, width = 150, alt="100" />
+# npphen <img src="man/figures/npphen_logo.png" align="right" height=180, width = 180, alt="100" />
 
 <!-- badges: start -->
 [![CRAN](https://www.r-pkg.org/badges/version/npphen)](https://CRAN.R-project.org/package=npphen)
