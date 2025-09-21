@@ -13,7 +13,7 @@ The R package npphen has been developed primarily to enable land surface phenolo
 
 * Long term phenological reconstruction for satellite time series, with no need of gap filling or any other adjustment.
   * Simple phenology
-  * Phenology and confidence intervals
+  * Phenology and its historical variability range (frequency distribution)
 * Custom anomaly calculation using the long term phenology as baseline
 * Raster functions for raster time series
   
